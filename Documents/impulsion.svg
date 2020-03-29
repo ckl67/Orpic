@@ -83,7 +83,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.98994949"
-     inkscape:cx="354.23258"
+     inkscape:cx="394.87784"
      inkscape:cy="427.19635"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
@@ -101,7 +101,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -168,7 +168,7 @@
          id="tspan5166"
          x="134.43657"
          y="144.65637"
-         style="stroke-width:0.26458332">1V ou 5V</tspan></text>
+         style="stroke-width:0.26458332">Max Vin</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:6.3499999px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
@@ -179,7 +179,7 @@
          id="tspan5170"
          x="134.1693"
          y="217.08641"
-         style="stroke-width:0.26458332">-1V ou -5V</tspan></text>
+         style="stroke-width:0.26458332">Min Vin</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:6.3499999px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
@@ -255,31 +255,31 @@
          id="tspan6361"
          x="20.312481"
          y="159.89073"
-         style="font-size:4.93888903px;fill:#0000ce;fill-opacity:1;stroke-width:0.26458332">bit 0 ou bit1</tspan><tspan
+         style="font-size:4.93888903px;fill:#0000ce;fill-opacity:1;stroke-width:0.26458332">Sinus (+)</tspan><tspan
          sodipodi:role="line"
          x="20.312481"
          y="167.82823"
+         style="font-size:4.93888903px;fill:#0000ce;fill-opacity:1;stroke-width:0.26458332"
+         id="tspan876">bit 0 ou bit1</tspan><tspan
+         sodipodi:role="line"
+         x="20.312481"
+         y="175.76573"
          style="font-size:4.93888903px;fill:#0000ce;fill-opacity:1;stroke-width:0.26458332"
          id="tspan6371">0xC0</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:6.3499999px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-       x="16.83798"
+       x="20.579754"
        y="191.96307"
        id="text6367"><tspan
          sodipodi:role="line"
-         id="tspan6365"
-         x="16.83798"
+         x="20.579754"
          y="191.96307"
-         style="font-size:4.93888903px;fill:#0000ea;fill-opacity:1;stroke-width:0.26458332">Impulsion</tspan><tspan
-         sodipodi:role="line"
-         x="16.83798"
-         y="199.90057"
          style="font-size:4.93888903px;fill:#0000ea;fill-opacity:1;stroke-width:0.26458332"
-         id="tspan6369">déclenchement</tspan><tspan
+         id="tspan6369">Sinus (-)</tspan><tspan
          sodipodi:role="line"
-         x="16.83798"
-         y="207.83807"
+         x="20.579754"
+         y="199.90057"
          style="font-size:4.93888903px;fill:#0000ea;fill-opacity:1;stroke-width:0.26458332"
          id="tspan6373">0x40</tspan></text>
   </g>

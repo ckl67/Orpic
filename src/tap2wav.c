@@ -1,8 +1,11 @@
 /*=================================
   tap2wav tool
-  Origine: F.Frances
+  based on 
+      tap2wav : F.Frances
+      tap2f16 : S.Guyart     
+
   Adapted: C. Klugesherz
-  Date 2020 March 24
+  Date 2020 March
   ================================== */
 
 /* ================================= */
@@ -91,10 +94,10 @@ int main(int argc,char *argv[])
 	printf("        yes/no/y/n --> A silence zone will be added at the end of the different parts \n");
 	printf("  Option -b : mean baud rate value \n");
 	printf("        n  --> normal          : ~2000 Baud (default) \n");
-	printf("       lf  --> low fast        : ~2300 Baud (only for 11025Hz) \n");
-	printf("        f  --> fast            : ~2900 Baud ( for 8000Hz or 11025Hz) \n");
-	printf("       sf  --> super fast      : ~3300 Baud ( for 8000Hz or 11025Hz) \n");
-	printf("      hsf  --> high super fast : ~4000 Baud ( only for 11025Hz) \n");
+	printf("       lf  --> low fast        : ~2500 Baud (for 8000Hz or for 11025Hz) \n");
+	printf("        f  --> fast            : ~2700 Baud (only for 11025Hz) \n");
+	printf("       sf  --> super fast      : ~2900 Baud (only for 11025Hz) \n");
+	printf("      hsf  --> high super fast : ~3200 Baud (only for 11025Hz) \n");
 	exit(1);
     }
 
@@ -332,10 +335,7 @@ void emit_bit(int bit)
 	// bit 1: T*3 = 375us
 	// bit 0: T*5 = 625us
         if (bit) {
-	    if (strcmp(param_b,"f")==0) {
-		emit_level(1);
-		emit_level(1);
-	    } else if (strcmp(param_b,"sf")==0) {
+	    if (strcmp(param_b,"lf")==0) {
 		emit_level(1);
 		emit_level(1);
 	    } else {
@@ -343,12 +343,9 @@ void emit_bit(int bit)
 		emit_level(2);
 	    }
         } else {
-	    if (strcmp(param_b,"f")==0) {
+	    if (strcmp(param_b,"lf")==0) {
 		emit_level(2);
-		emit_level(2);
-	    } else if (strcmp(param_b,"sf")==0) {
-		emit_level(1);
-		emit_level(2);
+		emit_level(3);
 	    } else {	     
 		emit_level(2);
 		emit_level(3);
@@ -361,14 +358,14 @@ void emit_bit(int bit)
 	// bit 0: T*7 = 630us
         if (bit) {
 	    if (strcmp(param_b,"lf")==0) {
-		emit_level(2);
+		emit_level(1);
 		emit_level(2);
 	    } else  if (strcmp(param_b,"f")==0) {
 		emit_level(1);
 		emit_level(2);
 	    } else if (strcmp(param_b,"sf")==0) {
 		emit_level(1);
-		emit_level(2);
+		emit_level(1);
 	    } else if (strcmp(param_b,"hsf")==0) {
 		emit_level(1);
 		emit_level(1);
@@ -379,16 +376,16 @@ void emit_bit(int bit)
         } else {
 	    if (strcmp(param_b,"lf")==0) {
 		emit_level(3);
-		emit_level(3);
+		emit_level(4);
 	    } else  if (strcmp(param_b,"f")==0) {
-		emit_level(2);
+		emit_level(3);
 		emit_level(3);
 	    } else if (strcmp(param_b,"sf")==0) {
-		emit_level(2);
-		emit_level(2);
+		emit_level(3);
+		emit_level(4);
 	    } else if (strcmp(param_b,"hsf")==0) {
-		emit_level(2);
-		emit_level(2);
+		emit_level(3);
+		emit_level(3);
 	    } else {	     
 		emit_level(3);
 		emit_level(4);
@@ -417,7 +414,9 @@ void emit_byte(int val)
     emit_bit(1);
     emit_bit(1);
     emit_bit(1);
-    emit_bit(1); 
+    // We will squeeze 1 stop bit if no acceleration is requested
+    if (strcmp(param_b,"n")==0)   
+	emit_bit(1); 
 }
 
 /* ---------------------------------------------------------- 
@@ -513,10 +512,8 @@ int init(int argc, char *argv[])
     }
     else if (strcmp(param_f,"8")==0) {
 	speed=8000;
-	if (strcmp(param_b,"f")==0) 
-	    strcpy(mbaud,"2900");
-	else if (strcmp(param_b,"sf")==0) 
-	    strcpy(mbaud,"3300");
+	if (strcmp(param_b,"lf")==0) 
+	    strcpy(mbaud,"2500");
 	else 
 	    strcpy(mbaud,"2000");
     }
@@ -524,13 +521,13 @@ int init(int argc, char *argv[])
 	speed=11025;
 
 	if (strcmp(param_b,"lf")==0) 
-	    strcpy(mbaud,"2300");
+	    strcpy(mbaud,"2500");
 	else  if (strcmp(param_b,"f")==0) 
-	    strcpy(mbaud,"2900");
+	    strcpy(mbaud,"2700");
 	else if (strcmp(param_b,"sf")==0) 
-	    strcpy(mbaud,"3300");
+	    strcpy(mbaud,"2900");
 	else if (strcmp(param_b,"hsf")==0) 
-	    strcpy(mbaud,"4000");
+	    strcpy(mbaud,"3200");
 	else 
 	    strcpy(mbaud,"2000");
     }

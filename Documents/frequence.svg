@@ -219,8 +219,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.98994949"
-     inkscape:cx="375.30317"
-     inkscape:cy="874.49862"
+     inkscape:cx="269.39515"
+     inkscape:cy="914.90472"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -243,7 +243,8 @@
   <g
      inkscape:label="Calque 1"
      inkscape:groupmode="layer"
-     id="layer1">
+     id="layer1"
+     style="display:inline">
     <path
        style="fill:none;stroke:#000000;stroke-width:0.28207773px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 50.897219,42.45616 20.797629,0.116139"
@@ -350,7 +351,7 @@
          id="tspan1254"
          x="8.3154755"
          y="11.438984"
-         style="stroke-width:0.26458332">f=4800Hz</tspan></text>
+         style="stroke-width:0.26458332">fe=4800Hz</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:6.3499999px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
@@ -361,7 +362,7 @@
          id="tspan1258"
          x="10.205358"
          y="71.726189"
-         style="stroke-width:0.26458332">f=8000Hz</tspan></text>
+         style="stroke-width:0.26458332">fe=8000Hz</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:0.24837859px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 49.467352,99.518672 12.499935,0.149846"
@@ -511,13 +512,13 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:6.3499999px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-       x="45.755737"
-       y="49.972973"
+       x="44.95393"
+       y="56.654713"
        id="text1252-0"><tspan
          sodipodi:role="line"
          id="tspan1250-6"
-         x="45.755737"
-         y="49.972973"
+         x="44.95393"
+         y="56.654713"
          style="font-size:3.88055563px;stroke-width:0.26458332">416µs</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#marker5906-3);marker-end:url(#Arrow1Lend-3-0)"
@@ -527,13 +528,13 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:6.3499999px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-       x="97.42379"
-       y="50.728928"
+       x="100.89829"
+       y="57.143394"
        id="text1252-0-5"><tspan
          sodipodi:role="line"
          id="tspan1250-6-5"
-         x="97.42379"
-         y="50.728928"
+         x="100.89829"
+         y="57.143394"
          style="font-size:3.88055563px;stroke-width:0.26458332">624µs</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#marker5906-4);marker-end:url(#Arrow1Lend-3-6)"
@@ -567,5 +568,55 @@
          x="101.269"
          y="107.81956"
          style="font-size:3.88055563px;stroke-width:0.26458332">625µs</tspan></text>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="pointillé">
+    <path
+       style="display:inline;fill:none;stroke:#000000;stroke-width:0.26499999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:1.05999995, 1.05999994999999991;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 20.579754,38.283095 H 155.55086"
+       id="path982"
+       inkscape:connector-curvature="0" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Calque 2"
+     style="display:inline">
+    <path
+       style="display:inline;fill:none;stroke:#a90000;stroke-width:0.86500001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 29.018128,39.0319 c 3.970959,-7.033493 5.708211,-11.643892 10.537762,-11.706854 5.025103,-0.06551 7.063945,6.576109 9.748983,12.245266 2.468226,5.211382 4.484484,9.673579 11.788786,9.608742 5.725867,-0.05083 7.193502,-5.537677 9.79938,-10.348529"
+       id="path978"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="csssc" />
+    <path
+       style="display:inline;fill:none;stroke:#a900dc;stroke-width:1.07473564;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 70.975548,38.823543 c 3.603994,-6.242301 3.546155,-11.272363 11.069034,-11.334761 7.827485,-0.06492 7.680959,3.532048 10.374906,9.997465 3.042891,7.302875 11.528962,11.457849 22.906702,11.393592 8.91905,-0.05037 16.8178,-5.488092 20.87692,-10.255868"
+       id="path978-3"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="csssc" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:6.3499999px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="20.579754"
+       y="22.781464"
+       id="text1095"><tspan
+         sodipodi:role="line"
+         id="tspan1093"
+         x="20.579754"
+         y="22.781464"
+         style="stroke-width:0.26458332;stroke:#a9002c;stroke-opacity:1">Bit: 1</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:6.3499999px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="105.57146"
+       y="31.06682"
+       id="text1099"><tspan
+         sodipodi:role="line"
+         id="tspan1097"
+         x="105.57146"
+         y="31.06682"
+         style="stroke-width:0.26458332;stroke:#a900e9;stroke-opacity:1">Bit: 0</tspan></text>
   </g>
 </svg>
