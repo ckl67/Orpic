@@ -20,9 +20,9 @@
 /* ============= DEFINE ============ */
 /* ================================= */
 
-#define SILENCE_SECOND 3   // Duration in seconds of the silence 0x80 in .wav file
+#define VERSION "1.2"
 #define AUDIO_LEVEL 192    // Audio level : Max = 255 : Median = 128 : Min = 0
-#define FILE_PATH_LEN 250  //
+#define FILE_PATH_LEN 300  //
 
 /* ================================= */
 /* ======== .WAV STRUCTURE========== */
@@ -53,10 +53,35 @@ int file_size=0;
 int speed=4800;
 char param_f[5]="4";
 char param_b[5]="n";
+char param_e[5]="3";
 char mbaud[10] = "2000";
 char split[5]="no";
 char ofile[FILE_PATH_LEN];
 struct riff sample_riff= { "RIFF",0,"WAVE","fmt ",16,1,1,0,0,1,8,"data",0 };
+
+char *usage = ""
+    "  Option -f : frequence \n"
+    "       4 --> produces a 4800 Hz WAV file (Default) \n"
+    "       8 --> produces a 8000 Hz WAV file \n"
+    "       11 --> produces a 11025Hz WAV file  \n"
+    "       44 --> produces a 44100Hz WAV file  \n"
+    "  Option -s : split output file \n"
+    "        yes/y--------> Will split the .WAV files in as many files than .TAP file is containing programs\n"
+    "                       The output .WAV file will end with an index number \n"
+    "        no/n---------> There will be only 'one' .WAV file containing all the program \n"
+    "        yes/no/y/n --> A silence zone will be added at the end of the different parts \n"
+    "  Option -b : mean baud rate value \n"
+    "        n  --> normal          : ~2000 Baud (default) for 4800Hz or 8000Hz or 11025Hz \n"
+    "                l------------> : ~2500 Baud (default) for 44100Hz \n"
+    "        f  --> fast            :                        \n"
+    "                |------------> : ~2500 Baud for  8000Hz  \n"
+    "                |------------> : ~3100 Baud for 11025Hz  \n"
+    "                l------------> : ~3400 Baud for 44100Hz  \n"
+    "  Option -e : Empty duration in \"seconds\" (silence 0x80) in .wav file at: \n"
+    "                -the end of the file  \n"
+    "                -between 2 secions in the .Tap file \n"
+    "  Option -v : version \n"
+    "  Option -h : help \n";
 
 /* ================================= */
 /* ========== PROTOYPES ============ */
@@ -80,27 +105,16 @@ int main(int argc,char *argv[])
     int oneshot = 0;
     int ofilenb = 0;
     char ofileresult[FILE_PATH_LEN];
+    int silence_sec=3;
     
     if (init(argc,argv) == 0) {
-	printf("Usage: %s -i <.TAP file> -o <.WAV file> -f [4, 8 or 11] -s [yes/no/y/n] -b [lf,f,sf,ssf] \n",argv[0]);
-	printf("  Option -f : frequence \n");
-	printf("       4 --> produces a 4800 Hz WAV file (Default) \n");
-	printf("       8 --> produces a 8000 Hz WAV file \n");
-	printf("       11 --> produces a 11025Hz WAV file  \n");
-	printf("  Option -s : split output file \n");
-	printf("        yes/y--------> Will split the .WAV files in as many files than .TAP file is containing programs\n");
-	printf("                       The output .WAV file will end with an index number \n");
-	printf("        no/n---------> There will be only 'one' .WAV file containing all the program \n");
-	printf("        yes/no/y/n --> A silence zone will be added at the end of the different parts \n");
-	printf("  Option -b : mean baud rate value \n");
-	printf("        n  --> normal          : ~2000 Baud (default) \n");
-	printf("       lf  --> low fast        : ~2500 Baud (for 8000Hz or for 11025Hz) \n");
-	printf("        f  --> fast            : ~2700 Baud (only for 11025Hz) \n");
-	printf("       sf  --> super fast      : ~2900 Baud (only for 11025Hz) \n");
-	printf("      hsf  --> high super fast : ~3200 Baud (only for 11025Hz) \n");
+	printf("Usage: %s -i <.TAP file> -o <.WAV file> -f [4, 8 or 11] -s [yes/no/y/n] -b [f] -v -h\n",argv[0]);
 	exit(1);
     }
 
+
+    // Get the silence length
+    silence_sec = atoi(param_e);
     if ((strcmp(split,"yes")== 0) || (strcmp(split,"y")== 0) ){
 	// ++++++++++++++++++++++++++
 	// WILL CREATE SEVERAL FILES
@@ -157,7 +171,7 @@ int main(int argc,char *argv[])
 
 	    // Send .Wav Silence = 0x80 : 3 secondes 
 	    // at 4800Hz --> 4800 sample for 1 seconds
-	    for (i=0;i<speed*SILENCE_SECOND;i++)
+	    for (i=0;i<speed*silence_sec;i++)
 		send_wav_silence_byte();
 
 	    // Close output File
@@ -173,7 +187,7 @@ int main(int argc,char *argv[])
 
 		fclose(out);
     
-		printf("%s file created at frequence %d Hz with a mean's Baud rate at : %s bits/s \n",ofileresult,speed,mbaud);
+		printf("%s file created at frequence %d Hz with a mean's Baud rate at : %s bits/s  (With silence of %d sec.) \n",ofileresult,speed,mbaud,silence_sec);
 
 		file_size=0;		
 		oneshot = 0;
@@ -204,6 +218,7 @@ int main(int argc,char *argv[])
 	    while (fgetc(in)==0x16){
 	    } 
 
+	    oneshot++;
 	    if (feof(in))
 		break;
 
@@ -232,7 +247,7 @@ int main(int argc,char *argv[])
 
 	    // Send .Wav Silence = 0x80 : 3 secondes 
 	    // at 4800Hz --> 4800 sample for 1 seconds
-	    for (i=0;i<speed*SILENCE_SECOND;i++)
+	    for (i=0;i<speed*silence_sec;i++)
 		send_wav_silence_byte();
 	}
 	fclose(in);
@@ -247,7 +262,11 @@ int main(int argc,char *argv[])
 
 	fclose(out);
     
-	printf("%s file created at frequence %d Hz with a mean's Baud rate at : %s bits/s \n",ofileresult,speed,mbaud);
+	printf("%s file created at frequence %d Hz with a mean's Baud rate at : %s bits/s  (With silence of %d sec.)\n",ofileresult,speed,mbaud,silence_sec);
+
+	if(oneshot > 1)
+	    printf("     Beware, there is more than 1 section in the .Tap file ! --> (You should use obtion -s) \n");
+	    
     }
 }
 
@@ -335,17 +354,17 @@ void emit_bit(int bit)
 	// bit 1: T*3 = 375us
 	// bit 0: T*5 = 625us
         if (bit) {
-	    if (strcmp(param_b,"lf")==0) {
+	    if (strcmp(param_b,"f")==0) {
 		emit_level(1);
 		emit_level(1);
 	    } else {
-		emit_level(1);
 		emit_level(2);
+		emit_level(1);
 	    }
         } else {
-	    if (strcmp(param_b,"lf")==0) {
-		emit_level(2);
-		emit_level(3);
+	    if (strcmp(param_b,"f")==0) {
+		emit_level(1);
+		emit_level(4);
 	    } else {	     
 		emit_level(2);
 		emit_level(3);
@@ -357,16 +376,7 @@ void emit_bit(int bit)
 	// bit 1: T*4 = 362us
 	// bit 0: T*7 = 630us
         if (bit) {
-	    if (strcmp(param_b,"lf")==0) {
-		emit_level(1);
-		emit_level(2);
-	    } else  if (strcmp(param_b,"f")==0) {
-		emit_level(1);
-		emit_level(2);
-	    } else if (strcmp(param_b,"sf")==0) {
-		emit_level(1);
-		emit_level(1);
-	    } else if (strcmp(param_b,"hsf")==0) {
+	    if (strcmp(param_b,"f")==0) {
 		emit_level(1);
 		emit_level(1);
 	    } else {	     
@@ -374,22 +384,32 @@ void emit_bit(int bit)
 		emit_level(2);
 	    }
         } else {
-	    if (strcmp(param_b,"lf")==0) {
-		emit_level(3);
-		emit_level(4);
-	    } else  if (strcmp(param_b,"f")==0) {
-		emit_level(3);
-		emit_level(3);
-	    } else if (strcmp(param_b,"sf")==0) {
-		emit_level(3);
-		emit_level(4);
-	    } else if (strcmp(param_b,"hsf")==0) {
-		emit_level(3);
-		emit_level(3);
+	    if (strcmp(param_b,"f")==0) {
+		emit_level(1);
+		emit_level(5);
 	    } else {	     
-		emit_level(3);
-		emit_level(4);
+		emit_level(2);
+		emit_level(5);
 	    }
+        }
+        break;
+    case 44100:
+        if (bit) {
+	    if (strcmp(param_b,"f")==0) {
+		emit_level(3);
+		emit_level(3);
+	    } else {
+		emit_level(6);
+		emit_level(6);
+	    }		
+        } else {
+	    if (strcmp(param_b,"f")==0) {
+		emit_level(3);
+		emit_level(21);
+	    } else {
+		emit_level(6);
+		emit_level(22);
+	    }		
         }
         break;
     }
@@ -439,13 +459,21 @@ int init(int argc, char *argv[])
 {
     size_t optind;
 
-    char errortxt[] =  "Usage: %s -i <input file.tap> -o <output file.wav> -f [4, 8 or 11] -s [yes/no/y/n] -b [lf,f,sf,ssf] \n";
+    char errortxt[] =  "Usage: %s -i <input file.tap> -o <output file.wav> -f [4, 8 or 11] -s [yes/no/y/n] -b [mean's baud] -e[empty in second] -v -h \n";
     char ifile[FILE_PATH_LEN];
 
    
     for (optind = 1; optind < argc ; optind++) {
 	if (argv[optind][0] == '-') {
 	    switch (argv[optind][1]) {
+	    case 'v':
+		    printf("tap2wav version : %s\n",VERSION);
+		    exit(0);
+		break;
+	    case 'h':
+		    printf("Usage : \n%s\n",usage);
+		    exit(0);
+		break;
 	    case 'i':
 		if (argv[optind+1]!=NULL)
 		    strcpy(ifile,argv[optind+1]);
@@ -478,9 +506,25 @@ int init(int argc, char *argv[])
 		    exit(EXIT_FAILURE);
 		}
 		break;
+	    case 'p':
+		if (argv[optind+1]!=NULL)
+		    strcpy(param_e,argv[optind+1]);
+		else {
+		    fprintf(stderr,errortxt, argv[0]);
+		    exit(EXIT_FAILURE);
+		}
+		break;
 	    case 'b':
 		if (argv[optind+1]!=NULL)
 		    strcpy(param_b,argv[optind+1]);
+		else {
+		    fprintf(stderr,errortxt, argv[0]);
+		    exit(EXIT_FAILURE);
+		}
+		break;
+	    case 'e':
+		if (argv[optind+1]!=NULL)
+		    strcpy(param_e,argv[optind+1]);
 		else {
 		    fprintf(stderr,errortxt, argv[0]);
 		    exit(EXIT_FAILURE);
@@ -500,7 +544,7 @@ int init(int argc, char *argv[])
     }
 
     // Check parameter param_b : baud rate
-    if ( (strcmp(param_b,"n") && strcmp(param_b,"lf") && strcmp(param_b,"f") && strcmp(param_b,"sf") && strcmp(param_b,"hsf")) ) {
+    if ( (strcmp(param_b,"n") &&  strcmp(param_b,"f")) ) {
 	printf("Bad Baud rate parameter : %s  !!\n\n", param_b);
 	return 0;
     }
@@ -512,7 +556,7 @@ int init(int argc, char *argv[])
     }
     else if (strcmp(param_f,"8")==0) {
 	speed=8000;
-	if (strcmp(param_b,"lf")==0) 
+	if (strcmp(param_b,"f")==0) 
 	    strcpy(mbaud,"2500");
 	else 
 	    strcpy(mbaud,"2000");
@@ -520,16 +564,18 @@ int init(int argc, char *argv[])
     else if (strcmp(param_f,"11")==0) {
 	speed=11025;
 
-	if (strcmp(param_b,"lf")==0) 
-	    strcpy(mbaud,"2500");
-	else  if (strcmp(param_b,"f")==0) 
-	    strcpy(mbaud,"2700");
-	else if (strcmp(param_b,"sf")==0) 
-	    strcpy(mbaud,"2900");
-	else if (strcmp(param_b,"hsf")==0) 
-	    strcpy(mbaud,"3200");
+	if (strcmp(param_b,"f")==0) 
+	    strcpy(mbaud,"3100");
 	else 
 	    strcpy(mbaud,"2000");
+    }
+    else if (strcmp(param_f,"44")==0) {
+	speed=44100;
+
+	if (strcmp(param_b,"f")==0) 
+	    strcpy(mbaud,"3400");
+	else 
+	    strcpy(mbaud,"2500");
     }
     else { 
 	printf("Bad frequence option : %s  !!\n\n",param_f);
