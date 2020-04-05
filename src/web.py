@@ -1,5 +1,11 @@
+# March 2020
+# Christian Klugesherz
+# Development enviroment has to be activated
+#    .venv/bin/activate
+
 from flask import Flask, render_template, request
 import os
+import common
 
 # We create an instance of the class Flask
 # The first argument is the name of the application’s
@@ -10,15 +16,15 @@ app = Flask(__name__)
 
 # Create a dictionary of all the tapes to display
 tapes = {
-   { "name"          : "Aigle d'Or",
-     "picture"       : "Aigle-d-Or.jpg",
-     "directory_src" : "static/Tapes/Aigle-d-Or/",
+   0:   { "name"          : "Aigle d'Or",
+     "picture"       : "Aigle_d-Or.jpg",
+     "directory_src" : "static/Tapes/Aigle_D'Or,_Le_(1984)/",
      "tape_nb"       : 1, 
      "tape_prefix"   : "AO_P"   },
    
-   { "name"          : "Le Diamant de l'Ile Maudite",
-     "picture"       : "Le-diamant-de-l-ile-maudite.jpg",
-     "directory_src" : "static/Tapes/Le-diamant-de-l-ile-maudite/",
+   1:   { "name"          : "Le Diamant de l'Ile Maudite",
+     "picture"       : "Diamant De L'ile Maudite.jpg",
+     "directory_src" : "static/Tapes/Diamant_De_L'_ile_Maudite,_Le_(1984)/",
      "tape_nb"       : 3,
      "tape_prefix"   : "DIAM-P"   }  
 }
@@ -61,7 +67,7 @@ def progress():
    def generate():
       x = 0
       while x <= 100:
-         vprg = "data:" + str(x) + "\n\n"
+         vprg = "data:" + str(x) + "\n\n"  
          yield vprg 
          x = x + 10
          time.sleep(0.5)
@@ -70,5 +76,8 @@ def progress():
 
 
 if __name__ == "__main__":
+   common.renameFiles("static/Tapes/"," ","_")
+   tapes = common.createNestedDict("static/Tapes/")
+   
    app.run(host="0.0.0.0", port=8080, debug=True)
 
