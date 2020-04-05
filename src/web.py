@@ -1,6 +1,6 @@
 # March 2020
 # Christian Klugesherz
-# Development enviroment has to be activated
+# Development environment has to be activated
 #    .venv/bin/activate
 
 from flask import Flask, render_template, request
@@ -15,20 +15,9 @@ import common
 app = Flask(__name__)
 
 # Create a dictionary of all the tapes to display
-tapes = {
-   0:   { "name"          : "Aigle d'Or",
-     "picture"       : "Aigle_d-Or.jpg",
-     "directory_src" : "static/Tapes/Aigle_D'Or,_Le_(1984)/",
-     "tape_nb"       : 1, 
-     "tape_prefix"   : "AO_P"   },
-   
-   1:   { "name"          : "Le Diamant de l'Ile Maudite",
-     "picture"       : "Diamant De L'ile Maudite.jpg",
-     "directory_src" : "static/Tapes/Diamant_De_L'_ile_Maudite,_Le_(1984)/",
-     "tape_nb"       : 3,
-     "tape_prefix"   : "DIAM-P"   }  
-}
+tapes = {}
 
+VERSION = "1.0"
 
 @app.route("/")
 def main():
@@ -37,7 +26,7 @@ def main():
       "tapes" : tapes
    }
    
-# http://localost?tapeIdx=1&audioIdx=1
+   # http://localost?tapeIdx=1&audioIdx=1
    # Tape index 
    tapeIdx = request.args.get('tapeIdx', default = 0, type = int)
    # Record Index
@@ -45,18 +34,22 @@ def main():
    
    if tapeIdx != 0:
       print("------------PLAY----------------")
-      print ("tapeIdx : ",tapeIdx)
-      print ("audioIdx : ",audioIdx)
-      print("Name : ",tapes[tapeIdx].get("name"))
-      print("Play Tape : ",tapes[tapeIdx].get("tape_prefix"),audioIdx)
+      print("tapeIdx   : ",tapeIdx)
+      print("audioIdx  : ",audioIdx)
+      print("Name      : ",tapes[tapeIdx].get("name")[0])
+      print("Directory : ",tapes[tapeIdx].get("directory_src")[0])
+      print("Play Tape : ",tapes[tapeIdx].get("tap_file")[audioIdx])
 
-      playFile = "{0}{1}{2}.wav".format(tapes[tapeIdx].get("directory_src"),tapes[tapeIdx].get("tape_prefix"),audioIdx )
+      playFile = "{0}{1}".format(tapes[tapeIdx].get("directory_src")[0],tapes[tapeIdx].get("tap_file")[audioIdx] )
       print("Play File : ",playFile)
 
       # We are using ative play linux player
       # Installed with : sudo apt-get insatll sox
       # syntax: play [file name]
-      os.system(f"play {playFile}")
+      cmd = "../bin/tap2wav -i {0} -o ../data/audio.wav".format(common.formatCmd(playFile))
+      print(cmd)
+      os.system(cmd)
+      # os.system(f"play {playFile}")
       
    # Pass the template data into the template main.html and return it to the user
    return render_template("main.html", **templateData)

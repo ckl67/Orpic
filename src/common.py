@@ -57,6 +57,20 @@ def createNestedDict(dirin):
             
     return(odic)
 
+def formatCmd(cmd):
+    '''
+    Format the command to send to os.system
+    For exapmle to replace ' by \\'
+    '''
+
+    out = cmd
+    out = out.replace("'","\\'")
+    out = out.replace("(","\\(")
+    out = out.replace(")","\\)")
+    print(out)
+    return(out)
+
+    
 def printNestDict(oricdic):
     for  o_id,o_info in oricdic.items():
         print("\nDic id:",o_id)
@@ -72,4 +86,9 @@ if __name__ =='__main__':
     renameFiles(vdirectory," ","_")
     oricdic= createNestedDict(vdirectory)
     printNestDict(oricdic)
-    
+
+    print(oricdic[1].get("name")[0] )
+    print(oricdic[1].get("tap_file")[0] )
+    print(oricdic[1].get("tap_file")[1] )
+
+    print(formatCmd("l'ile de l'ascencion"))

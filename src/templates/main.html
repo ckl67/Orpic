@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <head>
-   <title>Oric Games</title>
-   <meta charset="utf-8">
-   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <title>Oric Games</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
-   </script>
-   
+</script>
+
 </head>
 
 <body>
   <h1>Oric Game Web Server</h1>
 
-  <table style="width:100%">
+  <table style="width:80%">
     {% for tnb in tapes %}
     <tr>
       
@@ -19,15 +19,16 @@
 	{{ tapes[tnb].name[0] }}
       </td>
       
-      <td width="40%">
-	
-	<img src={{ tapes[tnb].directory_src[0] }}{{ tapes[tnb].picture[0] }}
-	     width="200" 
-	     alt={{ tapes[tnb].name[0] }}
-	     >
+      <td width="40%">	
+	<img src={{ tapes[tnb].directory_src[0] }}{{ tapes[tnb].picture[0] }} width="200" alt={{ tapes[tnb].name[0] }} >
       </td>
 
-      <td>
+      <td align="left">
+
+	{% for i in range(tapes[tnb].tape_nb[0]) %}
+	<a href="?tapeIdx={{tnb}}&audioIdx={{i}}">{{ tapes[tnb].tap_file[i] }}</a>
+	<br>
+	{% endfor %}
 	
       </td>
       
