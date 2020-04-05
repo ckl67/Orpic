@@ -1,9 +1,18 @@
+# ###########################################################################################
+#  ORPIC WEB SERVER
+#
 # March 2020
 # Christian Klugesherz
+#
 # Development environment has to be activated
 #    .venv/bin/activate
+#
+# Source
+# : https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-iii-web-forms
+# ###########################################################################################
 
-from flask import Flask, render_template, request
+
+from flask import Flask, render_template, request, url_for, redirect
 import os
 import common
 
@@ -14,17 +23,19 @@ import common
 # This is needed so that Flask knows where to look for templates, static files, and so on.
 app = Flask(__name__)
 
+# Configuration option for Flask
+app.config['SECRET_KEY'] = "You-will-never-guess"
+
 # Create a dictionary of all the tapes to display
 tapes = {}
+
 
 VERSION = "1.0"
 
 @app.route("/")
 def main():
    # Put the dictionary into the template data dictionary:
-   templateData = {
-      "tapes" : tapes
-   }
+   templateData = {"tapes" : tapes }
    
    # http://localost?tapeIdx=1&audioIdx=1
    # Tape index 
@@ -54,19 +65,11 @@ def main():
    # Pass the template data into the template main.html and return it to the user
    return render_template("main.html", **templateData)
 
-@app.route('/progress')
-def progress():
-   
-   def generate():
-      x = 0
-      while x <= 100:
-         vprg = "data:" + str(x) + "\n\n"  
-         yield vprg 
-         x = x + 10
-         time.sleep(0.5)
-         
-   return Response(generate(), mimetype= 'text/event-stream')
-
+@app.route('/login')
+def login():
+    form = LoginForm()
+    return render_template('login.html', title='Sign In', form=form)
+ 
 
 if __name__ == "__main__":
    common.renameFiles("static/Tapes/"," ","_")
