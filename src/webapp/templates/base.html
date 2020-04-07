@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<head>
+  <title>Oric Games</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+  <div>
+    <a href="/">Home</a>
+    <a href="/preference">Preference</a>
+  </div>
+  
+  <hr>
+  {% block content %}{% endblock %}
+</body>
+
+</html>

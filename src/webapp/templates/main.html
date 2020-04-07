@@ -1,14 +1,6 @@
-<!DOCTYPE html>
-<head>
-  <title>Oric Games</title>
-  <meta charset="utf-8">
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+{% extends "base.html" %}
 
-</script>
-
-</head>
-
-<body>
+{% block content %}
   <h1>Oric Game Web Server</h1>
 
   <table style="width:80%">
@@ -35,7 +27,4 @@
     </tr>
     {% endfor %}
   </table>
-  
-</body>
-</html>
-
+{% endblock %}
