@@ -72,7 +72,6 @@ def createNestedDict(dirin):
             iddic= iddic + 1
             odic[iddic] = {} # Create a new Dic
             odic[iddic].setdefault('name',[]).append(d.replace("_"," ")) # Add a key in the dict as a list
-            #odic[iddic].setdefault('directory_src',[]).append(formatCmd2os(join(dirin, d))+"/")
             odic[iddic].setdefault('directory_src',[]).append(join(dirin, d)+"/")
 
             nbtap = 0
@@ -82,13 +81,10 @@ def createNestedDict(dirin):
 
                 if file_extension.lower() == ".tap":
                     nbtap = nbtap + 1
-                    #odic[iddic].setdefault('tap_file',[]).append(formatCmd2os(f)) # add as many items in the list!
                     odic[iddic].setdefault('tap_file',[]).append(f) # add as many items in the list!
                 if file_extension.lower() == ".jpg":
-                    #odic[iddic].setdefault('picture',[]).append(formatCmd2os(f))
                     odic[iddic].setdefault('picture',[]).append(f)
                 if file_extension.lower() == ".png":
-                    #odic[iddic].setdefault('picture',[]).append(formatCmd2os(f))
                     odic[iddic].setdefault('picture',[]).append(f)
             odic[iddic].setdefault('tape_nb',[]).append(nbtap)
             
