@@ -9,50 +9,75 @@ def printdebug(text,vdebug=True):
     if vdebug==True :
         print(text)
 
-
-def renameFiles(dirin,charin,charout):
+def renameFilesIn(basePath,dirinRlvPath,charin,charout):
     """
     function which rename all files in a directory by replacing : charin by charout
     parameters
-    * dirin : directory
+    * basePath : directory base Path
+    * dirinRlvPath : directory relative path
     * charin : characters to replace
     * charout : character to replace
     """
-    printdebug("---Enter : renameFiles---")
+    printdebug("---Enter : renameFilesIn in "+ basePath + dirinRlvPath + "  to replace : {" + charin + "} by {" + charout + "} ---")
 
+    dirin = basePath + dirinRlvPath
     if not exists(dirin):
-        print("\n --------> chek if : " + getcwd() + "/" + dirin +"exists\n")
+        print("\n --------> chek if : " + basePath + dirinRlvPath +"exists\n")
        
     for f in listdir(dirin): # lis all of item in a directory
         if isfile(join(dirin, f)): # Check if it is file
+            printdebug("        Check --> " + f)
             if f.find(charin) > 0:   # Check if in the file there is charin ?
                 fout = f.replace(charin,charout)
                 printdebug("  rename file by replacing: {"+ charin +"} by {" + charout + "} ::" + f + "-->" + fout)
                 rename(join(dirin, f),join(dirin, fout))
     return 1
-
-def renameDirectoryIn(dirin,charin,charout):
+       
+def renameAllFilesInSubDir(basePath,dirinRlvPath,charin,charout):
     """
-    function which rename all Directories in a directory by replacing : charin by charout
+    function which will rename all files in all Sub directories of a Directory by replacing : charin by charout
     parameters
-    * dirin : directory
+    * basePath : directory base Path
+    * dirinRlvPath : directory relative path
     * charin : characters to replace
     * charout : character to replace
     """
-    printdebug("---Enter : renameDirectoryIn---")
+    printdebug("---Enter : renameFilesInSubDirs in "+ basePath + dirinRlvPath + "  to replace : {" + charin + "} by {" + charout + "} ---")
 
+    dirin = basePath + dirinRlvPath
     if not exists(dirin):
-        print("\n --------> chek if : " + getcwd() + "/" + dirin +"exists\n")
-       
+        print("\n --------> chek if : " + basePath + dirinRlvPath +" exists\n")
+  
+    for d in listdir(dirin): # lis all of item in a directory
+        printdebug("     Check Dir --> " + d)
+        if isdir(join(dirin, d)): # Check if it is directory
+            renameFilesIn(dirin,d,charin,charout)
+    return 1
+
+def renameDirectoriesIn(basePath,dirinRlvPath,charin,charout):
+    """
+    function which rename all Directories in a directory by replacing : charin by charout
+    * basePath : directory base Path
+    * dirinRlvPath : directory relative path
+    * charin : characters to replace
+    * charout : character to replace
+    """
+    printdebug("---Enter : renameDirectoriesIn in "+ basePath + dirinRlvPath + "  to replace : {" + charin + "} by {" + charout + "} ---")
+
+    dirin = basePath + dirinRlvPath
+    if not exists(dirin):
+        print("\n --------> chek if : " + basePath + dirinRlvPath +" exists\n")
+  
     for f in listdir(dirin): # lis all of item in a directory
         if isdir(join(dirin, f)): # Check if it is directory
+            printdebug("        Check --> " + f)
             if f.find(charin) > 0:   # Check if in the file there is charin ?
                 fout = f.replace(charin,charout)
                 printdebug("  rename directory by replacing: {"+ charin +"} by {" + charout + "} ::" + f + "-->" + fout)
                 rename(join(dirin, f),join(dirin, fout))
     return 1
 
-def createNestedDict(dirin):
+def createNestedDict(dirinRlvPath):
     '''
     Create The Oric Nested dictionnary
     Will create a Key for each item
@@ -66,18 +91,20 @@ def createNestedDict(dirin):
     iddic = 0
     nbtap = 0
     
-    for d in listdir(dirin): # lis all of item in a directory
-        if isdir(join(dirin, d)): # Check if it is directory
-            renameFiles(join(dirin, d)," ","_")
+    printdebug("    --> " + dirinRlvPath)
+    
+    for d in listdir(dirinRlvPath): # lis all of item in a directory
+        if isdir(join(dirinRlvPath, d)): # Check if it is directory
+            printdebug("       --> " + join(dirinRlvPath, d))
             iddic= iddic + 1
             odic[iddic] = {} # Create a new Dic
             odic[iddic].setdefault('name',[]).append(d.replace("_"," ")) # Add a key in the dict as a list
-            odic[iddic].setdefault('directory_src',[]).append(join(dirin, d)+"/")
+            odic[iddic].setdefault('directory_src',[]).append(join(dirinRlvPath, d)+"/")
 
             nbtap = 0
-            for f in listdir(join(dirin,d)): # lis all items in directory : d
+            for f in listdir(join(dirinRlvPath,d)): # lis all items in directory : d
                 #unpacking tuple
-                file_name, file_extension = splitext(join(dirin,f))
+                file_name, file_extension = splitext(join(dirinRlvPath,f))
 
                 if file_extension.lower() == ".tap":
                     nbtap = nbtap + 1
@@ -113,7 +140,7 @@ def formatCmd2os(cmd):
     return(out)
 
     
-def printNestDict(oricdic):
+def printNestedDict(oricdic):
     '''
     will print all elements in the Nested Dict
     '''
@@ -124,22 +151,24 @@ def printNestDict(oricdic):
             # now we are at the list level of key in dict o_info[key]
             print(key + ":")
             for vlist in o_info[key]:
-                print("   ->", vlist)
-    
+                print("   ->", vlist)   
 
 if __name__ =='__main__':
+    oricdic = {}
     # python common.py static/Tapes/
-    vdirectory = sys.argv[1:][0]
-    print("Rename Directories in the directory: ", vdirectory)
-    renameDirectoryIn(vdirectory," ","_")
+    # print("Rename Directories in the directory: ", "static/Tapes/")
+    # renameDirectoriesIn("/home/christian/Work/Orpic/src/webapp/", "static/Tapes/"," ","_")
     
-    print("Test formatCmd2os")
-    print("cd " + formatCmd2os("static/Tapes/Aigle_D'Or,_Le_(1984)/"))
-    
-    oricdic= createNestedDict(vdirectory)
-    printNestDict(oricdic)
+    # print("Rename All Files in the Sub directory: ", "static/Tapes/")
+    # renameAllFilesInSubDir("/home/christian/Work/Orpic/src/webapp/", "static/Tapes/"," ","_")
 
-    print("Print some elemnts in the Nested List: oricdic")
-    print(oricdic[1].get("name")[0] )
-    print(oricdic[1].get("tap_file")[0] )
-    print(oricdic[1].get("tap_file")[1] )
+    # print("Test formatCmd2os")
+    # print("cd " + formatCmd2os("static/Tapes/Aigle_D'Or,_Le_(1984)/"))
+    
+    oricdic= createNestedDict( "static/Tapes/")
+    # printNestedDict(oricdic)
+
+    # print("Print some elements in the Nested List: oricdic")
+    # print(oricdic[1].get("name")[0] )
+    # print(oricdic[1].get("tap_file")[0] )
+    # print(oricdic[1].get("tap_file")[1] )

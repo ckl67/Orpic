@@ -1,18 +1,18 @@
 from flask import render_template,request
 from webapp import app
-from webapp.common import createNestedDict, printNestDict
+from webapp.common import createNestedDict, printNestedDict
 
 # ######################################################
 # Global Vars
 # ######################################################
 
-# Put the dictionary into the template data dictionary:
-tapes = createNestedDict("webapp/static/Tapes/")
+# Put the dictionary into gthe template data dictionary:
+tapes = createNestedDict("static/Tapes/")
 
 @app.route('/')
 def home():
 
-    printNestDict(tapes)
+    printNestedDict(tapes)
 
     templateData = {"tapes" : tapes }
 
