@@ -1,3 +1,6 @@
+https://www.pythonanywhere.com/forums/topic/12195/
+https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world
+
 .flaskenv
 	FLASK_APP=web.py
 		Va configurer flask, pour indiquer qu'un : "flask run" va lancer web.py
@@ -25,6 +28,30 @@ __init__.py
 		La variable __name__ transmise à la classe Flask est une variable prédéfinie Python, qui définie le nom du module
 		dans lequel cette variable est utilisée. 
 		Flask utilise l'emplacement du module passé ici, comme point de départ lorsqu'il doit charger des ressources fichiers 
+
+		Comme: __init__.py se trouve dans /src/webapp: le point de départ est ici: /src/webapp
+
+			Supposons que vous ayez un mappage de fichier statique sur la page "Web" qui mappe 
+			l'url 		: /static/ 
+			vers
+			le répertoire 	: /home/votre nom d'utilisateu/votre site/static
+
+			Si une demande de 
+			* http://yourusername.pythonanywhere.com/static/images/something.png 
+			arrive, le système analysera les mappages de fichiers statiques, verra celui que vous avez configuré, 
+			puis recherchera un fichier 
+			* /home/votre nom d'utilisateur/votre site/statique/images/something.png.
+
+			Comme: __init__.py se trouve dans /src/ webapp:
+			--> /static/ (l'URL) sera mappé sur ./src/webapp/static (le répertoire)
+
+			Par exemple
+			 <link rel = "stylesheet" href = "static / style.css" fonctionne
+			mais
+			 <link rel = "stylesheet" href = "{{url_for ('static', filename = 'style.css')}}"> est préféré
+
+		ATTENTION avec l'application python qui elle prend la référence root sur .src/
+			information que remonte: os.getcwd()
 
 	app.config.from_object(Config)
 		Plutôt que de créer des Constantes de l'application à travers

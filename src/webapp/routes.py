@@ -6,8 +6,12 @@ from webapp.common import createNestedDict, printNestedDict
 # Global Vars
 # ######################################################
 
-# Put the dictionary into gthe template data dictionary:
-tapes = createNestedDict("static/Tapes/")
+# Create Tapes nested data dictionary:
+# Reference of Python root here is /src
+# Remark :  /static/ (URL) is mapped to ./src/webapp/static (DIR)
+#    As Tapes are located in static/Tapes (DIR) --> parameter dirUrlStatic =static/Tapes
+#     key: tapes[directory_url_static] = static/Tapes/ImageDirectory
+tapes = createNestedDict("webapp/static/Tapes/","static/Tapes/")
 
 @app.route('/')
 def home():
