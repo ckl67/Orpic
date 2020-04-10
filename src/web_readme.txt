@@ -15,6 +15,11 @@ webconfig.py
 		Ce module va rassembler toute la config de l'application
 		En d'autres termes de Constante
 
+		peut être utilisé par la suite ) travers
+
+		from webapp import app
+		app.config['DEBUG']
+
 web.py
 	from webapp import app
 		cette instruction importe la variable app qui est membre du package webapp

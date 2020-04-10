@@ -16,9 +16,17 @@ tapes = createNestedDict("webapp/static/Tapes/","static/Tapes/")
 @app.route('/')
 def home():
 
-    printNestedDict(tapes)
+    print("Config var WEBAPP_DEBUG_LEVEL", app.config["WEBAPP_DEBUG_LEVEL"])
+    print("Config var WEBAPP_VERSION", app.config["WEBAPP_VERSION"])
+    print("Config var TAP2WAV_VERSION", app.config["TAP2WAV_VERSION"])
 
-    templateData = {"tapes" : tapes }
+   # if (app.config["DEBUG"] == True):
+       # printNestedDict(tapes)
+
+    templateData = {"tapes" : tapes,
+                    "webappVersion" : app.config["WEBAPP_VERSION"],
+                    "tap2wavVersion" : app.config["TAP2WAV_VERSION"]
+    }
 
     # http://localost?tapeIdx=1&audioIdx=1
     # Tape index 
@@ -47,7 +55,6 @@ def home():
 
         
     # Pass the template data into the template main.html and return it to the user
-    #return render_template("main.html")
     return render_template("main.html", **templateData)
 
 @app.route('/preference')

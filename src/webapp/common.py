@@ -2,7 +2,7 @@ from os import listdir,rename,getcwd
 from os.path import isfile,isdir, join, splitext, exists
 import sys
 
-def printdebug(text,vdebug=True):
+def printdebug(text,vdebug=False):
     '''
     Print the text in the consol in case webconfig app.config["DEBUG"] = "True"
     '''

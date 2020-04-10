@@ -1,7 +1,6 @@
 from flask import Flask
 from webconfig import Config
 from webapp.common import renameAllFilesInSubDir, renameDirectoriesIn
-import os
 
 # ======================================================================
 # Default application root folder to construct static and templates path
@@ -31,12 +30,15 @@ import os
 #       BE CAREFUL with the python application which takes the root reference on .src/
 #                information got from : os.getcwd ()
 # ======================================================================
-
 renameDirectoriesIn("webapp/static/Tapes/"," ","_")
 renameAllFilesInSubDir("webapp/static/Tapes/"," ","_")
 
 app = Flask(__name__)
 app.config.from_object(Config)
+
+print("Config var WEBAPP_DEBUG_LEVEL", app.config["WEBAPP_DEBUG_LEVEL"])
+print("Config var WEBAPP_VERSION", app.config["WEBAPP_VERSION"])
+print("Config var TAP2WAV_VERSION", app.config["TAP2WAV_VERSION"])
 
 # Must be at the END of the script !!
 from webapp import routes

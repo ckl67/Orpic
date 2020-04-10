@@ -20,7 +20,7 @@
 /* ============= DEFINE ============ */
 /* ================================= */
 
-#define VERSION "1.2"
+#define VERSION "1.12"
 #define AUDIO_LEVEL 192    // Audio level : Max = 255 : Median = 128 : Min = 0
 #define FILE_PATH_LEN 300  //
 
@@ -86,6 +86,7 @@ char *usage = ""
 /* ================================= */
 /* ========== PROTOYPES ============ */
 /* ================================= */
+char* get_version(void);
 void adapt_ofile(char*, char*, int);
 void send_wav_silence_byte();
 void emit_level(int);
@@ -97,6 +98,10 @@ int init(int , char **);
 /* ================================= */
 /* ============= MAIN ============== */
 /* ================================= */
+char* get_version(void)
+{
+    return(VERSION);
+}
 
 int main(int argc,char *argv[])
 {
@@ -467,7 +472,7 @@ int init(int argc, char *argv[])
 	if (argv[optind][0] == '-') {
 	    switch (argv[optind][1]) {
 	    case 'v':
-		    printf("tap2wav version : %s\n",VERSION);
+		printf("tap2wav version : %s\n",get_version());
 		    exit(0);
 		break;
 	    case 'h':
