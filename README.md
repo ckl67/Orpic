@@ -1,10 +1,14 @@
 # Orpic
+
 Acronyme d'Oric et Raspberry Pi
 Orpic est un serveur Web permettant d'héberger des jeux pour Oric/Oric Atmos.
 
-Cette application est basée sur un serveur Web python dont l'ossature est basée sur Flask, et sur une conversion .tap --> .wav écrit en C.
+Cette application s'articule autour
+* d'un serveur Web développé en python dont l'ossature est basée sur Flask, et sur 
+* une conversion .tap --> .wav écrit en C.
 
 # Utilisation
+
 Lancement manuel.
 Une fois l'environement python activé à travers 
 
@@ -12,16 +16,19 @@ Une fois l'environement python activé à travers
 
 Il suffit de lancer (sous le répertoire .src)
 
-     flak run
+     flask run
     
 # Serveur
+
 L'avantage du sereur Web, est de pouvoir présenter les jeux d'une façon plus ludique, mais surtout d'avoir une possibiité d'ajouter à l'infinie des Jeux.
 
 ## Ajout d'un Jeu
-Pour ajouter un jeu, il suffit de copier le répertoire jeu que l'on peut récupérer par exemple sur le site "le-grenier-informatique.fr" et copier ce jeu au niveau répertoire /static/Tapes/<nouveau jeu>.
+
+Pour ajouter un jeu, il suffit de copier le répertoire du jeu _(que l'on peut récupérer par exemple sur le site "le-grenier-informatique.fr)"_ et copier ce jeu au niveau répertoire /static/Tapes/<nouveau jeu>.
 Par la suite y déposer le fichier .tap et d'y ajouter une image en .jpg ou .png
 
 # Programme tap2wav
+
 Le programme tap2 wav, peut bien entendu être utilisé tout seul
 Une version linux (Ubuntu) et windows est disponible
 
