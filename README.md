@@ -1,4 +1,6 @@
 # Orpic
+Acronyme d'Oric et raspberry Pi
+
 Permet d'émuler une cassette pour envoyer des fichiers .TAP sur Oric
 
 # Programme tap2wav
