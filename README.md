@@ -7,9 +7,12 @@ Cette application est basée sur un serveur Web python dont l'ossature est basé
 # Utilisation
 Lancement manuel.
 Une fois l'environement python activé à travers 
-    source venv/bin/activate
+
+     source venv/bin/activate
+
 Il suffit de lancer (sous le répertoire .src)
-    flak run
+
+     flak run
     
 # Serveur
 L'avantage du sereur Web, est de pouvoir présenter les jeux d'une façon plus ludique, mais surtout d'avoir une possibiité d'ajouter à l'infinie des Jeux.
