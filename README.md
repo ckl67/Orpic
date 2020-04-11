@@ -1,9 +1,21 @@
 # Orpic
 Acronyme d'Oric et raspberry Pi
+Orpic est un serveur Web permettant d'héberger des jeux pour Oric/Oric Atmos.
 
-Permet d'émuler une cassette pour envoyer des fichiers .TAP sur Oric
+Cette application est basée sur un serveur Web python dont l'ossature est basée sur Flask, et sur une conversion .tap vers fichier .wav écrit en C.
+
+# Utilisation
+Lancement manuel.
+Une fois l'environement python activé à travers 
+    source venv/bin/activate
+Il suffit de lancer sous le répertoire .src
+    flak run
+    
+# Serveur
 
 # Programme tap2wav
+Le programme tap2 wav, peut bien entendu être utilisé tout seul
+Une version linux (Ubuntu) et windows est disponible
 
     Usage : tap2wav
     Option -f : frequence 
