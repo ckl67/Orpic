@@ -3,7 +3,7 @@
 {% block content %}
   <h1>Oric Game Web Server</h1>
 
-  <table style="width:80%">
+  <table style="width:90%">
     {% for tnb in tapes %}
     <tr>
       
@@ -11,17 +11,26 @@
 	{{ tapes[tnb].name[0] }}
       </td>
       
-      <td width="40%" align="center">
+      <td width="30%" align="center">
 	<img src={{ tapes[tnb].directory_url_static[0] }}{{ tapes[tnb].picture[0] }} width="200" alt= "name : {{ tapes[tnb].name[0] }}" >
       </td>
 
       <td align="left">
-
-	{% for i in range(tapes[tnb].tape_nb[0]) %}
-	<a href="?tapeIdx={{tnb}}&audioIdx={{i}}">{{ tapes[tnb].tap_file[i] }}</a>
-	<br>
-	{% endfor %}
 	
+	<table border="1" >
+	    {% for i in range(tapes[tnb].tape_nb[0]) %}
+	    <tr>
+	      <td>
+		{{ tapes[tnb].tap_file[i] }}
+	      </td>
+	      <td>
+		<a href="?tapeIdx={{tnb}}&audioIdx={{i}}">
+		  <button type="button" class="btn btn-Success btn-xs"> Play </button>
+		</a>
+	      </td>
+	  </tr>
+	    {% endfor %}
+	</table>
       </td>
       
     </tr>
