@@ -1,8 +1,8 @@
 from flask import render_template,request, redirect
 from webapp import app
-from webapp.common import createNestedDict, printNestedDict
-
+from webapp.common import createNestedDict, printNestedDict, formatCmd2os, printdebug
 from webapp.forms import preferenceForm
+import os
 
 # ######################################################
 # Global Vars
@@ -14,12 +14,31 @@ from webapp.forms import preferenceForm
 #    As Tapes are located in static/Tapes (DIR) --> parameter dirUrlStatic =static/Tapes
 #     key: tapes[directory_url_static] = static/Tapes/ImageDirectory
 tapes = createNestedDict("webapp/static/Tapes/","static/Tapes/")
+audioFiles = {}
 
 tap2wavParameters = {
     "pfrequence" : "4",
     "psplit" : "y",
     "pbaud" : "n"
 }
+
+def getIdFrequenceRadio():
+    out = 0
+    if tap2wavParameters["pfrequence"] == "4":
+        out = 1
+    elif tap2wavParameters["pfrequence"] == "8":
+        out = 2
+    elif tap2wavParameters["pfrequence"] == "11":
+        out = 3
+    elif tap2wavParameters["pfrequence"] == "44":
+        out = 4
+    else:
+        out = 0
+    printdebug(out)
+    return(out)
+    
+
+
 
 def printTap2wavParams():
     '''
@@ -46,9 +65,7 @@ def home():
     tapeIdx = request.args.get('tapeIdx', default = 0, type = int)
     # Record Index
     audioIdx = request.args.get('audioIdx', default = 0, type = int)
-
-    printTap2wavParams()
-    
+  
     if tapeIdx != 0:
         print("------------PLAY----------------")
         print("tapeIdx   : ",tapeIdx)
@@ -58,14 +75,25 @@ def home():
         print("Play Tape : ",tapes[tapeIdx].get("tap_file")[audioIdx])
 
         playFile = "{0}{1}".format(tapes[tapeIdx].get("directory_src")[0],tapes[tapeIdx].get("tap_file")[audioIdx] )
-        print("Play File : ",playFile)
 
         # We are using ative play linux player
         # Installed with : sudo apt-get insatll sox
         # syntax: play [file name]
-        cmd = "../bin/tap2wav -i {0} -o ../data/audio.wav".format(playFile)
-        print(cmd)
-        # os.system(cmd)
+        cmd = formatCmd2os("../bin/tap2wav -i {0} -o webapp/static/Audio/AudioTape/audio.wav -f {1} -s {2} -b {3} -e 3".format(
+            playFile,tap2wavParameters["pfrequence"],
+            tap2wavParameters["psplit"],
+            tap2wavParameters["pbaud"]))
+        printdebug(cmd)
+        # Force Delete directory
+        os.system("rm -R -f webapp/static/Audio/")
+        # Create Directory
+        os.system("mkdir webapp/static/Audio")
+        os.system("mkdir webapp/static/Audio/AudioTape")
+        # Create Audio Files
+        os.system(cmd)
+        # Create Nested Dictionnary
+        audioFiles = createNestedDict("webapp/static/Audio/","static/Audio/",True)
+        print(audioFiles)
         # os.system(f"play {playFile}")
 
         
@@ -74,9 +102,7 @@ def home():
 
 @app.route('/preferences', methods=['GET', 'POST'])
 def preference():
-    form = preferenceForm()
-    print("validated ! ",form.validate_on_submit())
-    
+    form = preferenceForm()  
     if form.validate_on_submit():
         print("debug",form.frequence.data)
         

@@ -2,7 +2,8 @@ from os import listdir,rename,getcwd
 from os.path import isfile,isdir, join, splitext, exists
 import sys
 
-def printdebug(text,vdebug=False):
+    
+def printdebug(text,vdebug=True):
     '''
     Print the text in the consol in case webconfig app.config["DEBUG"] = "True"
     '''
@@ -72,7 +73,7 @@ def renameDirectoriesIn(dirin,charin,charout):
                 rename(join(dirin, f),join(dirin, fout))
     return 1
 
-def createNestedDict(dirin,dirUrlStatic):
+def createNestedDict(dirin,dirUrlStatic,wave=False):
     '''
     Create The Oric Nested dictionnary
     Parameters
@@ -88,6 +89,7 @@ def createNestedDict(dirin,dirUrlStatic):
     odic = {}
     iddic = 0
     nbtap = 0
+    nbwav = 0
     
     printdebug("  Loops in Directory --> " + dirin)
     printdebug("     get the files in " )
@@ -105,6 +107,11 @@ def createNestedDict(dirin,dirUrlStatic):
                 #unpacking tuple
                 file_name, file_extension = splitext(join(dirin,f))
 
+                if wave == True:
+                    if file_extension.lower() == ".wav":
+                        nbwav = nbwav + 1
+                        odic[iddic].setdefault('wav_file',[]).append(f) # add as many items in the list!
+                    
                 if file_extension.lower() == ".tap":
                     nbtap = nbtap + 1
                     odic[iddic].setdefault('tap_file',[]).append(f) # add as many items in the list!
@@ -113,6 +120,8 @@ def createNestedDict(dirin,dirUrlStatic):
                 if file_extension.lower() == ".png":
                     odic[iddic].setdefault('picture',[]).append(f)
             odic[iddic].setdefault('tape_nb',[]).append(nbtap)
+            if wave == True:
+                odic[iddic].setdefault('wav_nb',[]).append(nbwav)
             
     return(odic)
 
