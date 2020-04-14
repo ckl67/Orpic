@@ -14,31 +14,12 @@ import os
 #    As Tapes are located in static/Tapes (DIR) --> parameter dirUrlStatic =static/Tapes
 #     key: tapes[directory_url_static] = static/Tapes/ImageDirectory
 tapes = createNestedDict("webapp/static/Tapes/","static/Tapes/")
-audioFiles = {}
 
 tap2wavParameters = {
     "pfrequence" : "4",
     "psplit" : "y",
     "pbaud" : "n"
 }
-
-def getIdFrequenceRadio():
-    out = 0
-    if tap2wavParameters["pfrequence"] == "4":
-        out = 1
-    elif tap2wavParameters["pfrequence"] == "8":
-        out = 2
-    elif tap2wavParameters["pfrequence"] == "11":
-        out = 3
-    elif tap2wavParameters["pfrequence"] == "44":
-        out = 4
-    else:
-        out = 0
-    printdebug(out)
-    return(out)
-    
-
-
 
 def printTap2wavParams():
     '''
@@ -48,37 +29,46 @@ def printTap2wavParams():
     print("psplit: " , tap2wavParameters["psplit"])
     print("pbaud: ", tap2wavParameters["pbaud"])
 
-    
+# http://localost?tapeIdx=1&tapeAudioIxd=1 
 @app.route('/')
 def home():
 
-   # if (app.config["DEBUG"] == True):
-       # printNestedDict(tapes)
+    audioFiles = {1 : {"name": ["AudioTape"],
+                   "directory_src": ["webapp/static/Audio/AudioTape/"],
+                   "directory_url_static": ["static/Audio/AudioTape/"],
+                   "wav_file":[""],
+                   "wav_nb":[0] }}
 
     templateData = {"tapes" : tapes,
+                    "tapeIdx": 0,
+                    "tapeAudioIxd":0,
+                    "audioFiles": audioFiles,
                     "webappVersion" : app.config["WEBAPP_VERSION"],
-                    "tap2wavVersion" : app.config["TAP2WAV_VERSION"]
+                    "tap2wavVersion" : app.config["TAP2WAV_VERSION"],
+                    "tap2wavpfrequence" : tap2wavParameters["pfrequence"],
+                    "tap2wavpsplit" : tap2wavParameters["psplit"],
+                    "tap2wavpbaud" : tap2wavParameters["pbaud"]
     }
 
-    # http://localost?tapeIdx=1&audioIdx=1
     # Tape index 
     tapeIdx = request.args.get('tapeIdx', default = 0, type = int)
     # Record Index
-    audioIdx = request.args.get('audioIdx', default = 0, type = int)
+    tapeAudioIxd = request.args.get('tapeAudioIxd', default = 0, type = int)
   
     if tapeIdx != 0:
+        templateData["tapeIdx"] = tapeIdx
+        templateData["tapeAudioIxd"] = tapeAudioIxd
         print("------------PLAY----------------")
         print("tapeIdx   : ",tapeIdx)
-        print("audioIdx  : ",audioIdx)
+        print("tapeAudioIxd  : ",tapeAudioIxd)
         print("Name      : ",tapes[tapeIdx].get("name")[0])
         print("Directory : ",tapes[tapeIdx].get("directory_src")[0])
-        print("Play Tape : ",tapes[tapeIdx].get("tap_file")[audioIdx])
-
-        playFile = "{0}{1}".format(tapes[tapeIdx].get("directory_src")[0],tapes[tapeIdx].get("tap_file")[audioIdx] )
+        print("Play Tape : ",tapes[tapeIdx].get("tap_file")[tapeAudioIxd])
 
         # We are using ative play linux player
         # Installed with : sudo apt-get insatll sox
         # syntax: play [file name]
+        playFile = "{0}{1}".format(tapes[tapeIdx].get("directory_src")[0],tapes[tapeIdx].get("tap_file")[tapeAudioIxd] )
         cmd = formatCmd2os("../bin/tap2wav -i {0} -o webapp/static/Audio/AudioTape/audio.wav -f {1} -s {2} -b {3} -e 3".format(
             playFile,tap2wavParameters["pfrequence"],
             tap2wavParameters["psplit"],
@@ -93,9 +83,15 @@ def home():
         os.system(cmd)
         # Create Nested Dictionnary
         audioFiles = createNestedDict("webapp/static/Audio/","static/Audio/",True)
-        print(audioFiles)
+        templateData["audioFiles"] = audioFiles
+        
+        print("------------AUDIO----------------")
+        print("Nb Audio Files : ",audioFiles[1].get("wav_nb")[0])
+        print("Audio Files : ",audioFiles[1].get("wav_file"))
+        print("tapeIdx: ", tapeIdx)
+        print("tapeAudioIxd: ",tapeAudioIxd)
+        
         # os.system(f"play {playFile}")
-
         
     # Pass the template data into the template main.html and return it to the user
     return render_template("main.html", **templateData)
