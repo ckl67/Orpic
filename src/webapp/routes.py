@@ -1,127 +1,116 @@
 from flask import render_template,request, redirect
 from webapp import app
-from webapp.common import createNestedDict, printNestedDict, formatCmd2os, printdebug
-from webapp.forms import preferenceForm
+from webapp.forms import preferenceForm, idForm2Val_Frequence, idForm2Val_Split, idForm2Val_Baud
+from webapp.common import createNestedDict, formatCmd2os, pDbg2
 import os
 
 # ######################################################
 # Global Vars
+# Reference of Python root here is /src
+#    Remark :  /static/ (URL) is mapped to ./src/webapp/static (DIR)
 # ######################################################
 
-# Create Tapes nested data dictionary:
-# Reference of Python root here is /src
-# Remark :  /static/ (URL) is mapped to ./src/webapp/static (DIR)
-#    As Tapes are located in static/Tapes (DIR) --> parameter dirUrlStatic =static/Tapes
-#     key: tapes[directory_url_static] = static/Tapes/ImageDirectory
-tapes = createNestedDict("webapp/static/Tapes/","static/Tapes/")
+# Create nested data dictionary:
+tapesNL = createNestedDict("webapp/static/Tapes/","static/Tapes/")
+audioNL = createNestedDict("webapp/static/Audio/","static/Audio/")
 
-tap2wavParameters = {
-    "pfrequence" : "4",
-    "psplit" : "y",
-    "pbaud" : "n"
-}
+# ######################################################
+# Allows to Call a python function from jinja2
+# ######################################################
+@app.context_processor
+def utility_processor():
+    def FidForm2Val_Split(id):
+        return (idForm2Val_Split(id))
 
-def printTap2wavParams():
-    '''
-    Print all parameters which will be applied for tap2wav
-    '''
-    print("pfrequence: ", tap2wavParameters["pfrequence"])
-    print("psplit: " , tap2wavParameters["psplit"])
-    print("pbaud: ", tap2wavParameters["pbaud"])
+    def FidForm2Val_Frequence(id):
+        return (idForm2Val_Frequence(id))
 
-# http://localost?tapeIdx=1&tapeAudioIxd=1 
+    def FidForm2Val_Baud(id):
+        return (idForm2Val_Baud(id))
+
+    return dict(FidForm2Val_Frequence=FidForm2Val_Frequence,
+                FidForm2Val_Split=FidForm2Val_Split,
+                FidForm2Val_Baud=FidForm2Val_Baud)
+
+
+# ######################################################
+# http://localost?tapeId=1&tapeAudioId=1 
+# ######################################################
 @app.route('/')
 def home():
-
-    audioFiles = {1 : {"name": ["AudioTape"],
-                   "directory_src": ["webapp/static/Audio/AudioTape/"],
-                   "directory_url_static": ["static/Audio/AudioTape/"],
-                   "wav_file":[""],
-                   "wav_nb":[0] }}
-
-    templateData = {"tapes" : tapes,
-                    "tapeIdx": 0,
-                    "tapeAudioIxd":0,
-                    "audioFiles": audioFiles,
-                    "webappVersion" : app.config["WEBAPP_VERSION"],
-                    "tap2wavVersion" : app.config["TAP2WAV_VERSION"],
-                    "tap2wavpfrequence" : tap2wavParameters["pfrequence"],
-                    "tap2wavpsplit" : tap2wavParameters["psplit"],
-                    "tap2wavpbaud" : tap2wavParameters["pbaud"]
+    global audioNL
+  
+    templateData = {
+        "TapeId": 0,         # Tape ID 
+        "TapeAudioId":0,     # Tape Audio ID --> We can have several Tapes files (each of them can be splited in several wav files)
+        "TapesNL" : tapesNL,
+        "AudioNL": audioNL,
+        "AppConfig": app.config
     }
 
     # Tape index 
-    tapeIdx = request.args.get('tapeIdx', default = 0, type = int)
+    tapeIdx = request.args.get('tapeId', default = 0, type = int)
     # Record Index
-    tapeAudioIxd = request.args.get('tapeAudioIxd', default = 0, type = int)
+    tapeAudioIdx = request.args.get('tapeAudioId', default = 0, type = int)
   
     if tapeIdx != 0:
-        templateData["tapeIdx"] = tapeIdx
-        templateData["tapeAudioIxd"] = tapeAudioIxd
+        templateData["TapeId"] = tapeIdx
+        templateData["TapeAudioId"] = tapeAudioIdx
         print("------------PLAY----------------")
-        print("tapeIdx   : ",tapeIdx)
-        print("tapeAudioIxd  : ",tapeAudioIxd)
-        print("Name      : ",tapes[tapeIdx].get("name")[0])
-        print("Directory : ",tapes[tapeIdx].get("directory_src")[0])
-        print("Play Tape : ",tapes[tapeIdx].get("tap_file")[tapeAudioIxd])
+        print("tapeId   : ",tapeIdx)
+        print("tapeAudioId  : ",tapeAudioIdx)
+        print("Name      : ",tapesNL[tapeIdx]["name"][0])
+        print("Directory : ",tapesNL[tapeIdx]["directory_src"][0])
+        print("Play Tape : ",tapesNL[tapeIdx]["tap_file"][tapeAudioIdx])
 
         # We are using ative play linux player
         # Installed with : sudo apt-get insatll sox
         # syntax: play [file name]
-        playFile = "{0}{1}".format(tapes[tapeIdx].get("directory_src")[0],tapes[tapeIdx].get("tap_file")[tapeAudioIxd] )
-        cmd = formatCmd2os("../bin/tap2wav -i {0} -o webapp/static/Audio/AudioTape/audio.wav -f {1} -s {2} -b {3} -e 3".format(
-            playFile,tap2wavParameters["pfrequence"],
-            tap2wavParameters["psplit"],
-            tap2wavParameters["pbaud"]))
-        printdebug(cmd)
-        # Force Delete directory
-        os.system("rm -R -f webapp/static/Audio/")
-        # Create Directory
-        os.system("mkdir webapp/static/Audio")
-        os.system("mkdir webapp/static/Audio/AudioTape")
-        # Create Audio Files
-        os.system(cmd)
-        # Create Nested Dictionnary
-        audioFiles = createNestedDict("webapp/static/Audio/","static/Audio/",True)
-        templateData["audioFiles"] = audioFiles
+        playFile = "{0}{1}".format(tapesNL[tapeIdx]["directory_src"][0],tapesNL[tapeIdx]["tap_file"][tapeAudioIdx] )
+        cmd = formatCmd2os(
+            "../bin/tap2wav -i {0} -o webapp/static/Audio/AudioTape/audio.wav -f {1} -s {2} -b {3} -e 3"
+            .format(
+                playFile,
+                app.config["TAP2WAV_FORM_FREQUENCE_ID"],
+                app.config["TAP2WAV_FORM_SPLIT_ID"],
+                app.config["TAP2WAV_FORM_BAUD_ID"]
+            )
+        )
+        print(cmd)
+        # # Force Delete directory
+        # os.system("rm -R -f webapp/static/Audio/")
+        # # Create Directory
+        # os.system("mkdir webapp/static/Audio")
+        # os.system("mkdir webapp/static/Audio/AudioTape")
+        # # Create Audio Files
+        # os.system(cmd)
+        # # Create Nested Dictionnary
+        # audioNL = createNestedDict("webapp/static/Audio/","static/Audio/")
+        # templateData["AudioNL"] = audioNL
         
-        print("------------AUDIO----------------")
-        print("Nb Audio Files : ",audioFiles[1].get("wav_nb")[0])
-        print("Audio Files : ",audioFiles[1].get("wav_file"))
-        print("tapeIdx: ", tapeIdx)
-        print("tapeAudioIxd: ",tapeAudioIxd)
+        # print("------------AUDIO----------------")
+        # print("Nb Audio Files : ",audioNL[1].get("wav_nb")[0])
+        # print("Audio Files : ",audioNL[1].get("wav_file"))
+        # print("tapeIdx: ", tapeIdx)
+        # print("tapeAudioIdx: ",tapeAudioIdx)
         
-        # os.system(f"play {playFile}")
+        # # os.system(f"play {playFile}")
         
     # Pass the template data into the template main.html and return it to the user
     return render_template("main.html", **templateData)
 
 @app.route('/preferences', methods=['GET', 'POST'])
 def preference():
+    print(app.config["TAP2WAV_FORM_FREQUENCE_ID"])
     form = preferenceForm()  
     if form.validate_on_submit():
-        print("debug",form.frequence.data)
-        
-        if form.frequence.data == 1:
-            tap2wavParameters["pfrequence"] = "4"
-        elif form.frequence.data == 2:
-            tap2wavParameters["pfrequence"] = "8"
-        elif form.frequence.data == 3:
-            tap2wavParameters["pfrequence"] = "11"
-        else:
-            tap2wavParameters["pfrequence"] = "44"
+        app.config["TAP2WAV_FORM_FREQUENCE_ID"] = form.frequence.data
+        app.config["TAP2WAV_FORM_SPLIT_ID"] =  form.split.data
+        app.config["TAP2WAV_FORM_BAUD_ID"] = form.baud.data
 
-        if form.split.data == 1:
-            tap2wavParameters["psplit"] = "y"
-        else:
-            tap2wavParameters["psplit"] = "n"
-        
-        if form.baud.data == 1:
-            tap2wavParameters["pbaud"] = "n"
-        else:
-            tap2wavParameters["pbaud"] = "f"
+        print(app.config["TAP2WAV_FORM_FREQUENCE_ID"])
 
         return redirect('/')
     # Pass the template data into the template main.html and return it to the user
     #return render_template("main.html", **templateData)
-    return render_template("preference.html", title='Sign In', form=form)
+    return render_template("preference.html", AppConfig=app.config, form=form)

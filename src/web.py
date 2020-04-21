@@ -5,10 +5,8 @@
 # Christian Klugesherz
 #
 # Development environment has to be activated
-#    .venv/bin/activate
+#    venv/bin/activate
 #
-# Source
-# : https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-iii-web-forms
 # ###########################################################################################
 
 from webapp import app

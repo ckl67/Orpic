@@ -1,6 +1,7 @@
 # Orpic
 
-Acronyme d'Oric et Raspberry Pi
+Acronyme d'Oric et Raspberry Pi.
+Bien qu
 Orpic est un serveur Web permettant d'héberger des jeux pour Oric/Oric Atmos.
 
 Cette application s'articule autour

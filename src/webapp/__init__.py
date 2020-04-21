@@ -1,6 +1,6 @@
 from flask import Flask
 from webconfig import Config
-from webapp.common import renameAllFilesInSubDir, renameDirectoriesIn
+from webapp.common import renSubDir, renFileSubdir, setApplicationDebugLevel, pDbg0
 
 # ======================================================================
 # Default application root folder to construct static and templates path
@@ -26,22 +26,35 @@ from webapp.common import renameAllFilesInSubDir, renameDirectoriesIn
 #              For instance
 #                    <link rel="stylesheet" href="static/style.css" is working 
 #                    but   
-#                    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> is preffered
+#                    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> is prefered
+#
 #       BE CAREFUL with the python application which takes the root reference on .src/
 #                information got from : os.getcwd ()
 # ======================================================================
-renameDirectoriesIn("webapp/static/Tapes/"," ","_")
-renameAllFilesInSubDir("webapp/static/Tapes/"," ","_")
+# -----------------------------------------------------
+# We start here
+# -----------------------------------------------------
 
+# Rename Directories
+pDbg0("  (Debug) Rename Directories : webapp/static/Tapes/ ")
+renSubDir("webapp/static/Tapes/"," ","_")
+
+# Rename all files in Sub Directories
+pDbg0("  (Debug) Rename all files in Sub Directories : webapp/static/Tapes/")
+renFileSubdir("webapp/static/Tapes/"," ","_")
+
+# Create app
+pDbg0("  (Debug) Create app")
 app = Flask(__name__)
-app.config.from_object(Config)
 
-print("Config var WEBAPP_DEBUG_LEVEL", app.config["WEBAPP_DEBUG_LEVEL"])
-print("Config var WEBAPP_VERSION", app.config["WEBAPP_VERSION"])
-print("Config var TAP2WAV_VERSION", app.config["TAP2WAV_VERSION"])
+# Set application's configuration
+pDbg0("  (Debug) Set WebApp Configuration in app")
+app.config.from_object(Config)
+pDbg0(app.config)
+
+# Set the debug level
+pDbg0("  (Debug) Set debug level to: {0}".format(app.config["WEBAPP_DEBUG_LEVEL"]))
+setApplicationDebugLevel(app.config["WEBAPP_DEBUG_LEVEL"])
 
 # Must be at the END of the script !!
 from webapp import routes
-
-
-

@@ -1,12 +1,10 @@
 from ctypes import *
 
-# gcc -shared -O2 -o tap2wavlib.so -fPIC tap2wav.c
-#t2wlib = cdll.LoadLibrary('./tap2wavlib.so')
-#t2w_version = str(t2wlib.get_version())
-## FONCTIONNE PAS POUR L'INSTANT
-
 class Config(object):
-    WEBAPP_DEBUG_LEVEL = 0
+    WEBAPP_DEBUG_LEVEL = 5
     WEBAPP_VERSION = "1.00"
     TAP2WAV_VERSION = "1.12"
-    SECRET_KEY = 'you-will-never-guess'
+    SECRET_KEY = 'Mon Secret se cache derrière'
+    TAP2WAV_FORM_FREQUENCE_ID = 3
+    TAP2WAV_FORM_SPLIT_ID = 1
+    TAP2WAV_FORM_BAUD_ID = 1

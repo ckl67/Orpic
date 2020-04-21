@@ -4,38 +4,45 @@
   <h1>Oric Game Web Server</h1>
 
   <table style="width:100%" border ="0" >
-    {% for tnb in tapes %}
+    {% for tnb in TapesNL %}
 
-      {% if tapeIdx == tnb %}
-	{# Create Audio file has been clicked --> Audio files has been generated #}
+      {% if TapeId == tnb %}
+	{# Button: "Create Audio file" has been clicked --> Audio files has been created #}
 	{# Meaning URL : http://localost?tapeIdx=1&tapeAudioIxd=1  #}
 	{# -->  tempale tapeIdx has a value <> 0 #}
 	{# So here we will display the audio files generated #}
 	
 	<tr>
 	  <td width="25%">
-	    {{ tapes[tnb].name[0] }}
+	    {{ TapesNL[tnb]["name"][0] }}
 	  </td>
 	  
 	  <td width="25%" align="center">
-	    <img src={{ tapes[tnb].directory_url_static[0] }}{{ tapes[tnb].picture[0] }} width="200" alt= "name : {{ tapes[tnb].name[0] }}" >
+	    <img src={{ TapesNL[tnb]["directory_url_static"][0] }}{{ TapesNL[tnb]["picture"][0] }} width="200" alt= "name : {{ TapesNL[tnb]["name"][0] }}" >
 	  </td>
 
 	  <td align="left">
 	    <h3>
-		{{ tapes[tnb].tap_file[tapeAudioIxd].replace("_"," ") }}
+		{{ TapesNL[tnb]["tap_file"][TapeAudioId].replace("_"," ") }}
 	    </h2>
 
 	    <table border="0" >
-	      {% for j in range(audioFiles[1].wav_nb[0]) %}
+	      {% for j in range(AudioNL[1]["wav_nb"][0]) %}
 		<tr>
 		  <td>
-		     &nbsp < &nbsp{{ audioFiles[1]["wav_file"][j] }} > &nbsp
+		    {{ AudioNL[1]["wav_file"][j] }} &nbsp
 		  </td>
 		  <td>
-		    <a href="?tapeIdx={{tnb}}&tapeAudioIxd={{tapeAudioIxd}}&audioFile={{j}}">
-		      <button type="button" class="favorite styled"> Play <br> Audio Files </button>
-		    </a>
+		    {# <a href="?tapeIdx={{tnb}}&tapeAudioIxd={{TapeAudioId}}&audioFile={{j}}"> #}
+		    {#   <button type="button" class="favorite styled"> Play <br> Audio Files </button> #}
+		    {# </a> #}
+		    
+		    <audio
+		      controls
+		      src="{{AudioNL[1]["directory_url_static"][0]}}{{AudioNL[1]["wav_file"][j]}}">
+		      Your browser does not support the <code>audio</code> element.
+		    </audio>
+			
 		  </td>
 		</tr>
 	      {% endfor %}
@@ -47,29 +54,30 @@
 
 	
       {% else %}
-	{% if tapeIdx == 0 %}
+	
+	{% if TapeId == 0 %}
 	  {# Here we are at home level #}
 	  {# tempale tapeIdx = 0 #}
 	  {# We have to dispaly all the images #}
 	  <tr>
 	    <td width="25%">
-	      {{ tapes[tnb].name[0] }}
+	      {{ TapesNL[tnb]["name"][0] }}
 	    </td>
       
 	    <td width="25%" align="center">
-	      <img src={{ tapes[tnb].directory_url_static[0] }}{{ tapes[tnb].picture[0] }} width="200" alt= "name : {{ tapes[tnb].name[0] }}" >
+	      <img src={{ TapesNL[tnb]["directory_url_static"][0] }}{{ TapesNL[tnb]["picture"][0] }} width="200" alt= "name : {{ TapesNL[tnb]["name"][0] }}" >
 	    </td>
 
 	    <td align="left">
 	      
 	      <table border="0" >
-		{% for i in range(tapes[tnb].tape_nb[0]) %}
+		{% for i in range(TapesNL[tnb]["tape_nb"][0]) %}
 		  <tr>
 		    <td>
-		      {{ tapes[tnb].tap_file[i].replace("_"," ") }}
+		      {{ TapesNL[tnb]["tap_file"][i].replace("_"," ") }}
 		    </td>
 		    <td>
-		      <a href="?tapeIdx={{tnb}}&tapeAudioIxd={{i}}">
+		      <a href="?tapeId={{tnb}}&tapeAudioId={{i}}">
 			<button type="button" class="favorite styled"> Create<br> Audio Files </button>
 		      </a>
 		      

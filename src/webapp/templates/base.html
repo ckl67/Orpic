@@ -14,8 +14,11 @@
       </td>
       <td align="right" >
 	<psmall>
-	  Orpic: {{ webappVersion }} &nbsp tap2wav: {{ tap2wavVersion }} &nbsp --CKL <br>
-	  <i>tap2wav -f {{tap2wavpfrequence}} -s {{tap2wavpsplit}} -b {{tap2wavpbaud}} </i>
+	  Orpic: {{ AppConfig["WEBAPP_VERSION"] }} &nbsp tap2wav: {{ AppConfig["TAP2WAV_VERSION"] }} &nbsp --CKL <br>
+	  <i>tap2wav
+	    -f {{FidForm2Val_Frequence(AppConfig["TAP2WAV_FORM_FREQUENCE_ID"])}}
+	    -s {{FidForm2Val_Split(AppConfig["TAP2WAV_FORM_SPLIT_ID"])}}
+	    -b {{FidForm2Val_Baud(AppConfig["TAP2WAV_FORM_BAUD_ID"])}} </i>
 	</psmall>
       </td>
     </tr>
