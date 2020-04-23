@@ -270,7 +270,7 @@ int main(int argc,char *argv[])
 	printf("%s file created at frequence %d Hz with a mean's Baud rate at : %s bits/s  (With silence of %d sec.)\n",ofileresult,speed,mbaud,silence_sec);
 
 	if(oneshot > 1)
-	    printf("     Beware, there is more than 1 section in the .Tap file ! --> (You should use obtion -s) \n");
+	    printf("     Beware, there is more than 1 section in the .Tap file ! --> (You should use option -s) \n");
 	    
     }
 }
