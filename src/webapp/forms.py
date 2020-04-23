@@ -1,6 +1,5 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, RadioField , SubmitField
-from webapp import app
 from webapp.common import pError
 
 class preferenceForm(FlaskForm):
@@ -11,7 +10,7 @@ class preferenceForm(FlaskForm):
             (3,'11025 Hz'),
             (4,'44100 Hz')
         ],
-        default=app.config["TAP2WAV_FORM_FREQUENCE_ID"],
+        default=1,
         coerce=int)
     
     split = RadioField(
@@ -19,7 +18,7 @@ class preferenceForm(FlaskForm):
             (1,'Yes') ,
             (2,'No')
         ],
-        default=app.config["TAP2WAV_FORM_SPLIT_ID"],
+        default=1,
         coerce=int)
     
     baud =  RadioField(
@@ -27,7 +26,7 @@ class preferenceForm(FlaskForm):
             (1,'Normal') ,
             (2,'Fast')
         ],
-        default=app.config["TAP2WAV_FORM_BAUD_ID"],
+        default=1,
         coerce=int)
                          
     submit = SubmitField('Save')

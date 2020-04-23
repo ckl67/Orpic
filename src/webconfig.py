@@ -1,7 +1,7 @@
 from ctypes import *
 
 class Config(object):
-    WEBAPP_DEBUG_LEVEL = 5
+    WEBAPP_DEBUG_LEVEL = 0  # 0 to 5 
     WEBAPP_VERSION = "1.00"
     TAP2WAV_VERSION = "1.12"
     SECRET_KEY = 'Mon Secret se cache derrière'

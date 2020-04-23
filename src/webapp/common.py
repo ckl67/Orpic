@@ -32,6 +32,7 @@ APPLICATION_DEBUG_LEVEL = 0
 # def formatCmd2os(cmd):
 # def createNestedDict(dirin,dirUrl):
 # def printNestedDict(oricdic):
+# def pFlaskAppConf(my_dict, printAll=False):
    
 # ######################################################
 # Functions
@@ -47,12 +48,13 @@ def setApplicationDebugLevel(val):
     '''
     global APPLICATION_DEBUG_LEVEL
     APPLICATION_DEBUG_LEVEL = val
-    pDbg1("Application Debug Level: {0}".format(APPLICATION_DEBUG_LEVEL))
+    pDbg1("(setApplicationDebugLevel) Set Application Debug Level: {0}".format(APPLICATION_DEBUG_LEVEL))
 
 def getApplicationDebugLevel():
     ''' 
     get Global variable: APPLICATION_DEBUG_LEVEL
     '''
+    pDbg1("(getApplicationDebugLevel) Debug Level: {0}".format(APPLICATION_DEBUG_LEVEL))
     return (APPLICATION_DEBUG_LEVEL)
 
 # -----------------------------------------------------
@@ -376,8 +378,14 @@ def createNestedDict(dirin,dirUrl):
             if nbpicture > 0:
                 odic[iddic]["picture"].sort()
 
+    pDbg3("(createNestedDict) odic= {}".format(odic))
+    # Sort Nested list by name not workinig here !!
+    # odic = sorted(odic.items(), key = lambda x: x[1]['name']) 
+    pDbg3("(createNestedDict) Sorted odic= {}".format(odic))
+    
     if APPLICATION_DEBUG_LEVEL >= 5:
         printNestedDict(odic)
+
     return(odic)
 	
 # -----------------------------------------------------
@@ -394,7 +402,36 @@ def printNestedDict(oricdic):
             print(key + ":")
             for vlist in o_info[key]:
                 print("   ->", vlist)
-                
+
+def pFlaskAppConf(my_dict, printAll=False):
+    '''
+    Print the configuration information for Flask app.Config instance !
+    We will check the Debug Level to display the information
+        "WEBAPP_DEBUG_LEVEL" > 1 then the information is displayed
+    '''
+
+    DList = [
+        "WEBAPP_DEBUG_LEVEL",
+        "WEBAPP_VERSION",
+        "DEBUG",
+        "TAP2WAV_FORM_BAUD_ID",
+        "TAP2WAV_FORM_FREQUENCE_ID",
+        "TAP2WAV_FORM_SPLIT_ID",
+        "TAP2WAV_VERSION"
+    ]
+
+    if my_dict["WEBAPP_DEBUG_LEVEL"] > 1:
+    
+        if printAll == True:
+            for item in my_dict:
+                print("{0} = {1}".format(item,my_dict[item]))
+        else:
+            for item in my_dict:
+                for vl in DList:
+                    if vl == item:
+                        print("{0} = {1}".format(item,my_dict[item]))
+    
+                    
 # ######################################################
 # TESTS
 # ######################################################

@@ -1,7 +1,7 @@
 from flask import render_template,request, redirect
 from webapp import app
 from webapp.forms import preferenceForm, idForm2Val_Frequence, idForm2Val_Split, idForm2Val_Baud
-from webapp.common import createNestedDict, formatCmd2os, pDbg2
+from webapp.common import createNestedDict, formatCmd2os, pFlaskAppConf, renSubDir, renFileSubdir, pDbg1, pDbg2
 import os
 
 # ######################################################
@@ -33,16 +33,37 @@ def utility_processor():
                 FidForm2Val_Baud=FidForm2Val_Baud)
 
 
+@app.route('/reload')
+def reload():
+    global tapesNL
+
+    pDbg1("/Reload")
+
+    # Rename Directories
+    pDbg1("(reload) Rename Directories : webapp/static/Tapes/ ")
+    renSubDir("webapp/static/Tapes/"," ","_")
+
+    # Rename all files in Sub Directories
+    pDbg1("(reload) Rename all files in Sub Directories : webapp/static/Tapes/")
+    renFileSubdir("webapp/static/Tapes/"," ","_")
+
+    pDbg1("(reload) Create tapes Nested List ")
+    tapesNL = createNestedDict("webapp/static/Tapes/","static/Tapes/")
+
+    return redirect('/')
+
 # ######################################################
 # http://localost?tapeId=1&tapeAudioId=1 
 # ######################################################
 @app.route('/')
 def home():
     global audioNL
-  
+
+    pFlaskAppConf(app.config,False)
+
     templateData = {
         "TapeId": 0,         # Tape ID 
-        "TapeAudioId":0,     # Tape Audio ID --> We can have several Tapes files (each of them can be splited in several wav files)
+        "TapeAudioId":0,     # Tape Audio ID --> We can have several Tapes files (each of them can possibly be splited in several wav files)
         "TapesNL" : tapesNL,
         "AudioNL": audioNL,
         "AppConfig": app.config
@@ -56,61 +77,48 @@ def home():
     if tapeIdx != 0:
         templateData["TapeId"] = tapeIdx
         templateData["TapeAudioId"] = tapeAudioIdx
-        print("------------PLAY----------------")
-        print("tapeId   : ",tapeIdx)
-        print("tapeAudioId  : ",tapeAudioIdx)
-        print("Name      : ",tapesNL[tapeIdx]["name"][0])
-        print("Directory : ",tapesNL[tapeIdx]["directory_src"][0])
-        print("Play Tape : ",tapesNL[tapeIdx]["tap_file"][tapeAudioIdx])
+        pDbg2("(home) tapeId     : {}".format(tapeIdx))
+        pDbg2("(home) tapeAudioId: {}".format(tapeAudioIdx))
+        pDbg2("(home) Name       : {}".format(tapesNL[tapeIdx]["name"][0]))
+        pDbg2("(home) Directory  : {}".format(tapesNL[tapeIdx]["directory_src"][0]))
+        pDbg2("(home) Tape File  : {}".format(tapesNL[tapeIdx]["tap_file"][tapeAudioIdx]))
 
-        # We are using ative play linux player
-        # Installed with : sudo apt-get insatll sox
-        # syntax: play [file name]
         playFile = "{0}{1}".format(tapesNL[tapeIdx]["directory_src"][0],tapesNL[tapeIdx]["tap_file"][tapeAudioIdx] )
         cmd = formatCmd2os(
             "../bin/tap2wav -i {0} -o webapp/static/Audio/AudioTape/audio.wav -f {1} -s {2} -b {3} -e 3"
             .format(
                 playFile,
-                app.config["TAP2WAV_FORM_FREQUENCE_ID"],
-                app.config["TAP2WAV_FORM_SPLIT_ID"],
-                app.config["TAP2WAV_FORM_BAUD_ID"]
+                idForm2Val_Frequence(app.config["TAP2WAV_FORM_FREQUENCE_ID"]),
+                idForm2Val_Split(app.config["TAP2WAV_FORM_SPLIT_ID"]),
+                idForm2Val_Baud(app.config["TAP2WAV_FORM_BAUD_ID"])
             )
         )
-        print(cmd)
-        # # Force Delete directory
-        # os.system("rm -R -f webapp/static/Audio/")
-        # # Create Directory
-        # os.system("mkdir webapp/static/Audio")
-        # os.system("mkdir webapp/static/Audio/AudioTape")
-        # # Create Audio Files
-        # os.system(cmd)
-        # # Create Nested Dictionnary
-        # audioNL = createNestedDict("webapp/static/Audio/","static/Audio/")
-        # templateData["AudioNL"] = audioNL
-        
-        # print("------------AUDIO----------------")
-        # print("Nb Audio Files : ",audioNL[1].get("wav_nb")[0])
-        # print("Audio Files : ",audioNL[1].get("wav_file"))
-        # print("tapeIdx: ", tapeIdx)
-        # print("tapeAudioIdx: ",tapeAudioIdx)
-        
-        # # os.system(f"play {playFile}")
-        
+        # Force Delete files
+        os.system("rm -f webapp/static/Audio/AudioTape/*")
+        # Create Audio Files
+        pDbg2("(home) run: {0}".format(cmd))
+        os.system(cmd)
+        # Create Nested Dictionnary
+        audioNL = createNestedDict("webapp/static/Audio/","static/Audio/")
+        templateData["AudioNL"] = audioNL
+               
     # Pass the template data into the template main.html and return it to the user
     return render_template("main.html", **templateData)
 
 @app.route('/preferences', methods=['GET', 'POST'])
 def preference():
-    print(app.config["TAP2WAV_FORM_FREQUENCE_ID"])
-    form = preferenceForm()  
+    form = preferenceForm(
+        frequence=app.config["TAP2WAV_FORM_FREQUENCE_ID"],
+        split=app.config["TAP2WAV_FORM_SPLIT_ID"],
+        baud=app.config["TAP2WAV_FORM_BAUD_ID"]
+    )
+   
     if form.validate_on_submit():
         app.config["TAP2WAV_FORM_FREQUENCE_ID"] = form.frequence.data
         app.config["TAP2WAV_FORM_SPLIT_ID"] =  form.split.data
         app.config["TAP2WAV_FORM_BAUD_ID"] = form.baud.data
 
-        print(app.config["TAP2WAV_FORM_FREQUENCE_ID"])
+        pFlaskAppConf(app.config,False)
 
         return redirect('/')
-    # Pass the template data into the template main.html and return it to the user
-    #return render_template("main.html", **templateData)
     return render_template("preference.html", AppConfig=app.config, form=form)

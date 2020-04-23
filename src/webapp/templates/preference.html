@@ -1,22 +1,60 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Preferences for tap2wav</h1>
-    <form action="" method="post" novalidate>
-        {{ form.hidden_tag() }}
-        <p>
-	  {{ form.frequence.label }}<br>
-	  {{ form.frequence}}
-        </p>
-        <p>
-	  {{ form.split.label }}<br>
-	  {{ form.split}}
-        </p>
-        <p>
-	  {{ form.baud.label }}<br>
-	  {{ form.baud}}
-        </p>
+  <h1>Preferences for tap2wav</h1>
 
-        <p>{{ form.submit() }}</p>
-    </form>
+  <table style="width:100%" border ="0" >
+
+    <tr>
+      <td width="60%">
+	{# preferences which can be modified  #}
+	<form action="" method="post">
+          {{ form.hidden_tag() }}
+          <p>
+	    {{ form.frequence.label }}<br>
+	    {{ form.frequence}}
+          </p>
+          <p>
+	    {{ form.split.label }}<br>
+	    {{ form.split}}
+          </p>
+          <p>
+	    {{ form.baud.label }}<br>
+	    {{ form.baud}}
+          </p>
+	  
+          <p>{{ form.submit() }}</p>
+	</form>
+
+      </td>
+      <td valign="top">
+	{# Configuration of the Aplliction  #}
+	<table class="tab2" >
+	  <tr>
+	    <td valign="top">
+	      <b>webconfig.py</b>
+	    </td>
+	    <td>
+	      <br>
+	      Application Debug Level: <br>
+	      &nbsp &nbsp &nbsp WEBAPP_DEBUG_LEVEL =  {{ AppConfig["WEBAPP_DEBUG_LEVEL"] }}
+	      <br>
+	      <br>
+	      Default Values <br>
+	      &nbsp &nbsp Frequence: <br>
+	      &nbsp &nbsp &nbsp &nbsp TAP2WAV_FORM_FREQUENCE_ID =  {{ AppConfig["TAP2WAV_FORM_FREQUENCE_ID"] }} <br>
+	      &nbsp &nbsp Split: <br>
+	      &nbsp &nbsp &nbsp &nbsp TAP2WAV_FORM_SPLIT_ID =  {{ AppConfig["TAP2WAV_FORM_SPLIT_ID"] }} <br>
+	      &nbsp &nbsp Baud: <br>
+	      &nbsp &nbsp &nbsp &nbsp TAP2WAV_FORM_BAUD_ID =  {{ AppConfig["TAP2WAV_FORM_BAUD_ID"] }} <br>
+	      
+	    </td>
+	  </tr>
+	</table>
+
+	
+      </td>
+    </tr>
+  </table>
+  
 {% endblock %}

@@ -7,21 +7,21 @@
 
 <body>
   <div>
-    <table width="100%" border="0">
-    <tr>
+    <table width="100%" border="0" >
+    <tr1>
       <td>
-	<a href="/">Home</a>	&nbsp	<a href="/preferences">Preferences</a>
+	<a href="/">Home</a>	&nbsp	<a href="/preferences">Preferences</a> &nbsp	<a href="/reload">Reload</a>
       </td>
       <td align="right" >
 	<psmall>
-	  Orpic: {{ AppConfig["WEBAPP_VERSION"] }} &nbsp tap2wav: {{ AppConfig["TAP2WAV_VERSION"] }} &nbsp --CKL <br>
+	  Orpic: {{ AppConfig["WEBAPP_VERSION"] }} &nbsp tap2wav: {{ AppConfig["TAP2WAV_VERSION"] }} &nbsp @CKL <br>
 	  <i>tap2wav
 	    -f {{FidForm2Val_Frequence(AppConfig["TAP2WAV_FORM_FREQUENCE_ID"])}}
 	    -s {{FidForm2Val_Split(AppConfig["TAP2WAV_FORM_SPLIT_ID"])}}
 	    -b {{FidForm2Val_Baud(AppConfig["TAP2WAV_FORM_BAUD_ID"])}} </i>
 	</psmall>
       </td>
-    </tr>
+    </tr1>
     </table>   
   </div>
   <hr>

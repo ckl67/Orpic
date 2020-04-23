@@ -1,6 +1,6 @@
 from flask import Flask
 from webconfig import Config
-from webapp.common import renSubDir, renFileSubdir, setApplicationDebugLevel, pDbg0
+from webapp.common import renSubDir, renFileSubdir, setApplicationDebugLevel, pFlaskAppConf, pDbg0
 
 # ======================================================================
 # Default application root folder to construct static and templates path
@@ -36,25 +36,28 @@ from webapp.common import renSubDir, renFileSubdir, setApplicationDebugLevel, pD
 # -----------------------------------------------------
 
 # Rename Directories
-pDbg0("  (Debug) Rename Directories : webapp/static/Tapes/ ")
+pDbg0("  (__init__) Rename Directories : webapp/static/Tapes/ ")
 renSubDir("webapp/static/Tapes/"," ","_")
 
 # Rename all files in Sub Directories
-pDbg0("  (Debug) Rename all files in Sub Directories : webapp/static/Tapes/")
+pDbg0("  (__init__) Rename all files in Sub Directories : webapp/static/Tapes/")
 renFileSubdir("webapp/static/Tapes/"," ","_")
 
 # Create app
-pDbg0("  (Debug) Create app")
+pDbg0("  (__init__) Create app")
 app = Flask(__name__)
 
 # Set application's configuration
-pDbg0("  (Debug) Set WebApp Configuration in app")
+pDbg0("  (__init__) Set WebApp Configuration in app")
 app.config.from_object(Config)
-pDbg0(app.config)
 
 # Set the debug level
-pDbg0("  (Debug) Set debug level to: {0}".format(app.config["WEBAPP_DEBUG_LEVEL"]))
+pDbg0("  (__init__) Set debug level to: {0}".format(app.config["WEBAPP_DEBUG_LEVEL"]))
 setApplicationDebugLevel(app.config["WEBAPP_DEBUG_LEVEL"])
+
+# Display Flask app.config information
+pFlaskAppConf(app.config,False)
 
 # Must be at the END of the script !!
 from webapp import routes
+

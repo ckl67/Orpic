@@ -13,3 +13,16 @@ h1 {
 psmall {
     font-size: 0.75em;
 }
+
+.tab2 {
+    border: 1px solid black;
+    background-color:   #d8db3d;
+    color: #887733;
+}
+
+.ctab3 {
+    border: 0px solid black;
+    background-color: #d8da3d
+    color: black;
+    font-size: 0.9em;
+}

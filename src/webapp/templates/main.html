@@ -3,12 +3,27 @@
 {% block content %}
   <h1>Oric Game Web Server</h1>
 
+  {% if TapeId != 0 %}
+    <table style="width:100%" border ="0" >
+      <tr>
+	<td  width="25%" >
+	</td>
+	<td align="right" >
+	  <img src={{ url_for('static', filename='/Images/cloadOric.png') }}> 	  
+	</td>
+	<td class="ctab3" align="left" valign="center" >
+	  Run : CLOAD"" 
+	</td>
+      </tr>
+    </table>
+  {% endif %}
+
   <table style="width:100%" border ="0" >
     {% for tnb in TapesNL %}
 
       {% if TapeId == tnb %}
 	{# Button: "Create Audio file" has been clicked --> Audio files has been created #}
-	{# Meaning URL : http://localost?tapeIdx=1&tapeAudioIxd=1  #}
+	{# Meaning URL has been requested: http://localost?tapeIdx=1&tapeAudioIxd=1  #}
 	{# -->  tempale tapeIdx has a value <> 0 #}
 	{# So here we will display the audio files generated #}
 	
@@ -22,9 +37,7 @@
 	  </td>
 
 	  <td align="left">
-	    <h3>
-		{{ TapesNL[tnb]["tap_file"][TapeAudioId].replace("_"," ") }}
-	    </h2>
+	    <h3> {{ TapesNL[tnb]["tap_file"][TapeAudioId].replace("_"," ") }} </h3>
 
 	    <table border="0" >
 	      {% for j in range(AudioNL[1]["wav_nb"][0]) %}
@@ -48,11 +61,8 @@
 	      {% endfor %}
 	      
 	  </td>
-
-		    
 	</tr>
 
-	
       {% else %}
 	
 	{% if TapeId == 0 %}
