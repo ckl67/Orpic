@@ -94,7 +94,7 @@ def home():
             )
         )
         # Force Delete files
-        os.system("rm -f webapp/static/Audio/AudioTape/*")
+        os.system("rm -f webapp/static/Audio/AudioTape/*.wav")
         # Create Audio Files
         pDbg2("(home) run: {0}".format(cmd))
         os.system(cmd)

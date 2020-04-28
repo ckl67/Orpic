@@ -1,36 +1,41 @@
 # Win 32 bits
-#CXX	:= i686-w64-mingw32-gcc 
-#CIBLE	:= tap2wav.exe
+CXX_WIN32	:= i686-w64-mingw32-gcc 
+CIBLE_WIN32	:= tap2wav_w32.exe
 
 # Win 64 bits
-CXX1	:= x86_64-w64-mingw32-gcc 
-CIBLE1	:= tap2wav.exe
-
-# Ubuntu
-CXX2	:= gcc
-CIBLE2	:= tap2wav
+CXX_WIN64	:= x86_64-w64-mingw32-gcc 
+CIBLE_WIN64	:= tap2wav_w64.exe
 
 # Raspberry
-#CXX	:= arm-linux-gnueabihf-g++
-#CIBLE	:= tap2wav
+CXX_RASP	:= arm-linux-gnueabihf-gcc
+CIBLE_RASP	:= tap2wav_rasp
 
-CXX_FLAGS := -Wall -g 
+# Ubuntu
+CXX		:= gcc
+CIBLE		:= tap2wav	
 
-BIN	:= ../bin
-SRC	:= ../src
-INCLUDE	:= ../include
-LIB	:= ../lib
+CXX_FLAGS 	:= -Wall -g 
+
+BIN		:= ../bin
+SRC		:= ../src
+INCLUDE		:= ../include
+LIB		:= ../lib
 
 LIBRARIES	:=
 
+all: $(BIN)/$(CIBLE) $(BIN)/$(CIBLE_WIN64) $(BIN)/$(CIBLE_WIN32) $(BIN)/$(CIBLE_RASP)
 
-all: $(BIN)/$(CIBLE2) $(BIN)/$(CIBLE1)
+$(BIN)/$(CIBLE): $(SRC)/tap2wav.c
+	$(CXX) $(CXX_FLAGS) -I$(INCLUDE) -L$(LIB) $^ -o $(BIN)/$(CIBLE) $(LIBRARIES)
 
-$(BIN)/$(CIBLE2): $(SRC)/tap2wav.c
-	$(CXX2) $(CXX_FLAGS) -I$(INCLUDE) -L$(LIB) $^ -o $(BIN)/$(CIBLE2) $(LIBRARIES)
+$(BIN)/$(CIBLE_WIN64): $(SRC)/tap2wav.c
+	$(CXX_WIN64) $(CXX_FLAGS) -I$(INCLUDE) -L$(LIB) $^ -o $(BIN)/$(CIBLE_WIN64) $(LIBRARIES)
 
-$(BIN)/$(CIBLE1): $(SRC)/tap2wav.c
-	$(CXX1) $(CXX_FLAGS) -I$(INCLUDE) -L$(LIB) $^ -o $(BIN)/$(CIBLE1) $(LIBRARIES)
+$(BIN)/$(CIBLE_WIN32): $(SRC)/tap2wav.c
+	$(CXX_WIN32) $(CXX_FLAGS) -I$(INCLUDE) -L$(LIB) $^ -o $(BIN)/$(CIBLE_WIN32) $(LIBRARIES)
+
+$(BIN)/$(CIBLE_RASP): $(SRC)/tap2wav.c
+	$(CXX_RASP) -I$(INCLUDE) -L$(LIB) $^ -o $(BIN)/$(CIBLE_RASP) $(LIBRARIES)
 
 clean:
 	-rm -f $(BIN)/*
