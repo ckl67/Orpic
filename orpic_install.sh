@@ -3,8 +3,23 @@ echo "--------------------------------------------------"
 echo "    This procedure will install Orpic Server"
 echo "  Please to wait until installation is finished"
 echo "--------------------------------------------------"
+echo ""
+echo "Which target : (U)buntu or (R)aspberry: (u/r)?"
+read vartarget
+
+if [ "$vartarget" = "r" ]
+then
+    echo "Target = Raspberry"
+    cp bin/tap2wav_rasp bin/tap2wav
+else
+    echo "Target = Ubunutu"   
+    cp bin/tap2wav_ubuntu bin/tap2wav
+fi
+
+exit
 
 echo "Goto src"
+
 cd src
 
 echo "Create Python environment venv"

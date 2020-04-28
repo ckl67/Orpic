@@ -10,6 +10,10 @@ CIBLE_WIN64	:= tap2wav_w64.exe
 CXX_RASP	:= arm-linux-gnueabihf-gcc
 CIBLE_RASP	:= tap2wav_rasp
 
+# linux
+CXX_LINUX	:= gcc
+CIBLE_LINUX	:= tap2wav_ubuntu
+
 # Ubuntu
 CXX		:= gcc
 CIBLE		:= tap2wav	
@@ -23,10 +27,13 @@ LIB		:= ../lib
 
 LIBRARIES	:=
 
-all: $(BIN)/$(CIBLE) $(BIN)/$(CIBLE_WIN64) $(BIN)/$(CIBLE_WIN32) $(BIN)/$(CIBLE_RASP)
+all: $(BIN)/$(CIBLE) $(BIN)/$(CIBLE_WIN64) $(BIN)/$(CIBLE_WIN32) $(BIN)/$(CIBLE_RASP) $(BIN)/$(CIBLE_LINUX)
 
 $(BIN)/$(CIBLE): $(SRC)/tap2wav.c
 	$(CXX) $(CXX_FLAGS) -I$(INCLUDE) -L$(LIB) $^ -o $(BIN)/$(CIBLE) $(LIBRARIES)
+
+$(BIN)/$(CIBLE_LINUX): $(SRC)/tap2wav.c
+	$(CXX_LINUX) $(CXX_FLAGS) -I$(INCLUDE) -L$(LIB) $^ -o $(BIN)/$(CIBLE_LINUX) $(LIBRARIES)
 
 $(BIN)/$(CIBLE_WIN64): $(SRC)/tap2wav.c
 	$(CXX_WIN64) $(CXX_FLAGS) -I$(INCLUDE) -L$(LIB) $^ -o $(BIN)/$(CIBLE_WIN64) $(LIBRARIES)
