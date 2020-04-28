@@ -32,8 +32,8 @@ cd ..
 
 echo " "
 echo " "
-echo "Now you can run Orpic Server with : "
-echo "source run.sh"
+echo "Now you can run Orpic Server with command: "
+echo "    source orpic_run.sh"
 echo ""
 echo "     To deactivate the Python environement, execute : deactivate"
 echo ""
