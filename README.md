@@ -1,37 +1,27 @@
 # Orpic
 
 Acronyme d'Oric et Raspberry Pi.
-Bien qu
 Orpic est un serveur Web permettant d'héberger des jeux pour Oric/Oric Atmos.
 
-Cette application s'articule autour
-* d'un serveur Web développé en python dont l'ossature est basée sur Flask, et sur 
-* une conversion .tap --> .wav écrit en C.
+Plus d'informations sur
+* [Wiki](https://github.com/ckl67/Orpic/wiki)
+* [Page perso Orpic](http://christian.klugesherz.free.fr/index.php/2020/02/25/orpic/)
 
-# Utilisation
-
-Lancement manuel.
-Une fois l'environement python activé à travers 
-
-     source venv/bin/activate
-
-Il suffit de lancer (sous le répertoire .src)
-
-     flask run
-    
 # Serveur
 
-L'avantage du sereur Web, est de pouvoir présenter les jeux d'une façon plus ludique, mais surtout d'avoir une possibiité d'ajouter à l'infinie des Jeux.
+L'avantage du sereur Web, est de pouvoir présenter les jeux d'une façon plus ludique, mais surtout d'avoir une possibiité de les convertir en format .wav à la volée. 
+La conversion tap2wav reconnaissant le nombre de partie au niveau du ficher .tap
 
 ## Ajout d'un Jeu
 
 Pour ajouter un jeu, il suffit de copier le répertoire du jeu _(que l'on peut récupérer par exemple sur le site "le-grenier-informatique.fr)"_ et copier ce jeu au niveau répertoire /static/Tapes/<nouveau jeu>.
-Par la suite y déposer le fichier .tap et d'y ajouter une image en .jpg ou .png
+Par la suite y déposer avec le fichier .tap  une image en .jpg ou .png, et au niveau du serveur, appyuer sur "rechargement"
 
 # Programme tap2wav
 
-Le programme tap2 wav, peut bien entendu être utilisé tout seul
-Une version linux (Ubuntu) et windows est disponible
+Avec le serveur Orpis, la conversion se fait avec le programme tap2 wav.
+Ce programme peut bien entendu être utilisé tout seul
+Une version linux (Ubuntu), windows, et Raspberry est disponible
 
     Usage : tap2wav
     Option -f : frequence 
