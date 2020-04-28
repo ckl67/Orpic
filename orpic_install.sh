@@ -16,10 +16,7 @@ else
     cp bin/tap2wav_ubuntu bin/tap2wav
 fi
 
-exit
-
 echo "Goto src"
-
 cd src
 
 echo "Create Python environment venv"
