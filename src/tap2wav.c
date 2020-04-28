@@ -20,7 +20,7 @@
 /* ============= DEFINE ============ */
 /* ================================= */
 
-#define VERSION "1.12"
+#define VERSION "1.1.1"
 #define AUDIO_LEVEL 192    // Audio level : Max = 255 : Median = 128 : Min = 0
 #define FILE_PATH_LEN 300  //
 
