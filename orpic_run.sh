@@ -7,6 +7,7 @@ echo ""
 echo "The log information will be sent to orpic.log file"
 echo ""
 cd src
+source venv/bin/activate
 nohup flask run > orpic.log 2>&1 &
 cd ..
 echo ""
