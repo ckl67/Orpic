@@ -3,7 +3,18 @@
 Acronyme d'Oric et Raspberry Pi.
 Orpic est un serveur Web permettant d'héberger des jeux pour Oric/Oric Atmos.
 
-Plus d'informations sur
+# Installation
+
+Il suffit de récupérer le fichier '''orpic_install_update.sh''' et de lancer la commande
+
+    source orpic_install_update.sh
+	
+Ce qui va installer Orpic dans le répertoire ./Orpic
+
+# Pour Plus d'informations
+
+Consulter les articles 
+
 * [Wiki](https://github.com/ckl67/Orpic/wiki)
 * [Page perso Orpic](http://christian.klugesherz.free.fr/index.php/2020/02/25/orpic/)
 

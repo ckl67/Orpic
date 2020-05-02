@@ -20,7 +20,7 @@
 /* ============= DEFINE ============ */
 /* ================================= */
 
-#define VERSION "1.1.1"
+#define VERSION "1.1.2"
 #define AUDIO_LEVEL 192    // Audio level : Max = 255 : Median = 128 : Min = 0
 #define FILE_PATH_LEN 300  //
 
@@ -107,6 +107,7 @@ int main(int argc,char *argv[])
 {
     int i,size;
     unsigned char header[9];
+    unsigned char valin;
     int oneshot = 0;
     int ofilenb = 0;
     char ofileresult[FILE_PATH_LEN];
@@ -127,10 +128,21 @@ int main(int argc,char *argv[])
 
 	// Loop in the input file
 	while (!feof(in)) {
-	    
-	    // read synchro (0x24 included) 
-	    while (fgetc(in)==0x16){
-		oneshot = 1;
+
+	    // Here we are in the synchronization Block
+	    // We should only have several 0x16 followed by one 0x24 
+	    if (fgetc(in)==0x16) {
+		do {
+		    valin=fgetc(in);
+		    if ( (valin!=0x16) && (valin!=0x24) )  {
+			// This is not a real Synchronization
+			// We have to exit !
+			printf("----> Synchronization Issue \n\n");
+			exit(EXIT_FAILURE);
+		    }
+		    if (feof(in)) break;
+		    oneshot = 1;
+		} while (valin!=0x24);
 	    }
 
 	    // Open output File
@@ -219,9 +231,22 @@ int main(int argc,char *argv[])
 
 	// Loop in the input file
 	while (!feof(in)) {
-	    // read synchro (0x24 included) 
-	    while (fgetc(in)==0x16){
-	    } 
+
+	    // Here we are in the synchronization Block
+	    // We should only have several 0x16 followed by one 0x24 
+	    if (fgetc(in)==0x16) {
+		do {
+		    valin=fgetc(in);
+		    if ( (valin!=0x16) && (valin!=0x24) )  {
+			// This is not a real Synchronization
+			// We have to exit !
+			printf("----> Synchronization Issue \n\n");
+			exit(EXIT_FAILURE);
+		    }
+		    if (feof(in)) break;
+		    oneshot = 1;
+		} while (valin!=0x24);
+	    }
 
 	    oneshot++;
 	    if (feof(in))

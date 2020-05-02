@@ -4,8 +4,24 @@ echo "    This procedure will install Orpic Server"
 echo "  Please to wait until installation is finished"
 echo "--------------------------------------------------"
 echo ""
+echo "Directory target is ./Orpic (Enter)"
+read dirtarget
+OrpicDir=$(pwd)"/Orpic"
+echo "Destination directory = $OrpicDir"
+echo ""
 echo "Which target : (U)buntu or (R)aspberry: (u/r)?"
 read vartarget
+
+if [ -d "$OrpicDir" ] 
+then
+    echo "Directory $OrpicDir exists --> Orpic will be Updated"
+    cd Orpic
+    git pull   
+else
+    echo "Directory $OrpicDir does not exist --> Orpic will be installed ."
+    git clone https://github.com/ckl67/Orpic.git
+    cd Orpic  
+fi
 
 if [ "$vartarget" = "r" ]
 then
