@@ -1,10 +1,10 @@
 #!/bin/bash
-echo "--------------------------------------------------"
-echo "    This procedure will install Orpic Server"
-echo "  Please to wait until installation is finished"
-echo "--------------------------------------------------"
+echo " ----------------------------------------------------------"
+echo "|    This procedure will Install or Update Orpic Server    |"
+echo "|  Please to wait until installation or Update is finished |"
+echo " -----------------------------------------------------------"
 echo ""
-echo "Directory target is ./Orpic (Enter)"
+echo "Target directory is ./Orpic (Enter)"
 read dirtarget
 OrpicDir=$(pwd)"/Orpic"
 echo "Destination directory = $OrpicDir"
