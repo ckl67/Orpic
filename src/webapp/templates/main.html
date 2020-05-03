@@ -43,7 +43,8 @@
 	      {% for j in range(AudioNL[1]["wav_nb"][0]) %}
 		<tr>
 		  <td>
-		    {{ AudioNL[1]["wav_file"][j] }} &nbsp
+		    {# {{ AudioNL[1]["wav_file"][j] }} &nbsp #}
+		    audio_{{j+1}}.wav &nbsp
 		  </td>
 		  <td>
 		    {# <a href="?tapeIdx={{tnb}}&tapeAudioIxd={{TapeAudioId}}&audioFile={{j}}"> #}

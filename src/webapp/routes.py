@@ -1,4 +1,5 @@
 from flask import render_template,request, redirect
+from random import randrange
 from webapp import app
 from webapp.forms import preferenceForm, idForm2Val_Frequence, idForm2Val_Split, idForm2Val_Baud
 from webapp.common import createNestedDict, formatCmd2os, pFlaskAppConf, renSubDir, renFileSubdir, pDbg1, pDbg2
@@ -12,7 +13,10 @@ import os
 
 # Create nested data dictionary:
 tapesNL = createNestedDict("webapp/static/Tapes/","static/Tapes/")
+pDbg1("() tapesNL= {}".format(tapesNL))
+
 audioNL = createNestedDict("webapp/static/Audio/","static/Audio/")
+pDbg1("() audioNL= {}".format(audioNL))
 
 # ######################################################
 # Allows to Call a python function from jinja2
@@ -49,6 +53,7 @@ def reload():
 
     pDbg1("(reload) Create tapes Nested List ")
     tapesNL = createNestedDict("webapp/static/Tapes/","static/Tapes/")
+    pDbg2("(reload) tapesNL= {}".format(tapesNL))
 
     return redirect('/')
 
@@ -75,6 +80,11 @@ def home():
     tapeAudioIdx = request.args.get('tapeAudioId', default = 0, type = int)
   
     if tapeIdx != 0:
+        # Flask-Caching instance test 
+        # cache.clear()
+        # Clear cache seams not to work !!
+        # We will generate a random audio file name
+                
         templateData["TapeId"] = tapeIdx
         templateData["TapeAudioId"] = tapeAudioIdx
         pDbg2("(home) tapeId     : {}".format(tapeIdx))
@@ -84,13 +94,21 @@ def home():
         pDbg2("(home) Tape File  : {}".format(tapesNL[tapeIdx]["tap_file"][tapeAudioIdx]))
 
         playFile = "{0}{1}".format(tapesNL[tapeIdx]["directory_src"][0],tapesNL[tapeIdx]["tap_file"][tapeAudioIdx] )
+        audio_out = tapesNL[tapeIdx]["name"][0]
+        audio_out = audio_out.replace(" ","")
+        audio_out = audio_out.replace("'","")
+        audio_out = audio_out.replace(",","")
+        audio_out = audio_out.replace("(","")
+        audio_out = audio_out.replace(")","")
+        audio_out = "{0}_{1}.wav".format(audio_out,randrange(5000))
         cmd = formatCmd2os(
-            "../bin/tap2wav -i {0} -o webapp/static/Audio/AudioTape/audio.wav -f {1} -s {2} -b {3} -e 3"
+            "../bin/tap2wav -i {0} -o webapp/static/Audio/AudioTape/{4} -f {1} -s {2} -b {3} -e 3"
             .format(
                 playFile,
                 idForm2Val_Frequence(app.config["TAP2WAV_FORM_FREQUENCE_ID"]),
                 idForm2Val_Split(app.config["TAP2WAV_FORM_SPLIT_ID"]),
-                idForm2Val_Baud(app.config["TAP2WAV_FORM_BAUD_ID"])
+                idForm2Val_Baud(app.config["TAP2WAV_FORM_BAUD_ID"]),
+                audio_out
             )
         )
         # Force Delete files
@@ -100,6 +118,8 @@ def home():
         os.system(cmd)
         # Create Nested Dictionnary
         audioNL = createNestedDict("webapp/static/Audio/","static/Audio/")
+        pDbg2("(home) audioNL= {}".format(audioNL))
+
         templateData["AudioNL"] = audioNL
                
     # Pass the template data into the template main.html and return it to the user

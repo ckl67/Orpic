@@ -5,8 +5,8 @@ from webapp.common import pError
 class preferenceForm(FlaskForm):
     frequence = RadioField(
         'Frequence',choices=[
-            (1,'4800 Hz'),
-            (2,'8000 Hz'),
+            (1,'4800 Hz <i>(Not supported by the browser)</i>'),
+            (2,'8000 Hz <i>(Not recommended for the browser)</i> '),
             (3,'11025 Hz'),
             (4,'44100 Hz')
         ],
